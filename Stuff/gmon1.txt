@@ -1,0 +1,486 @@
+								
+								
+								
+call graph profile:						
+          The sum of self and descendents is the major sort	
+          for this listing.					
+								
+          function entries:					
+								
+index     the index of the function in the call graph		
+          listing, as an aid to locating it (see below).	
+								
+%time     the percentage of the total time of the program	
+          accounted for by this function and its		
+          descendents.						
+								
+self      the number of seconds spent in this function		
+          itself.						
+								
+descendents							
+          the number of seconds spent in the descendents of	
+          this function on behalf of this function.		
+								
+called    the number of times this function is called (other	
+          than recursive calls).				
+								
+self      the number of times this function calls itself	
+          recursively.						
+								
+name      the name of the function, with an indication of	
+          its membership in a cycle, if any.			
+								
+index     the index of the function in the call graph		
+          listing, as an aid to locating it.			
+								
+								
+								
+          parent listings:					
+								
+self*     the number of seconds of this function's self time	
+          which is due to calls from this parent.		
+								
+descendents*							
+          the number of seconds of this function's		
+          descendent time which is due to calls from this	
+          parent.						
+								
+called**  the number of times this function is called by	
+          this parent.  This is the numerator of the		
+          fraction which divides up the function's time to	
+          its parents.						
+								
+total*    the number of times this function was called by	
+          all of its parents.  This is the denominator of	
+          the propagation fraction.				
+								
+parents   the name of this parent, with an indication of the	
+          parent's membership in a cycle, if any.		
+								
+index     the index of this parent in the call graph		
+          listing, as an aid in locating it.			
+								
+								
+								
+          children listings:					
+								
+self*     the number of seconds of this child's self time	
+          which is due to being called by this function.	
+								
+descendent*							
+          the number of seconds of this child's descendent's	
+          time which is due to being called by this		
+          function.						
+								
+called**  the number of times this child is called by this	
+          function.  This is the numerator of the		
+          propagation fraction for this child.			
+								
+total*    the number of times this child is called by all	
+          functions.  This is the denominator of the		
+          propagation fraction.					
+								
+children  the name of this child, and an indication of its	
+          membership in a cycle, if any.			
+								
+index     the index of this child in the call graph listing,	
+          as an aid to locating it.				
+								
+								
+								
+          * these fields are omitted for parents (or		
+          children) in the same cycle as the function.  If	
+          the function (or child) is a member of a cycle,	
+          the propagated times and propagation denominator	
+          represent the self time and descendent time of the	
+          cycle as a whole.					
+								
+          ** static-only parents and children are indicated	
+          by a call count of 0.					
+								
+								
+								
+          cycle listings:					
+          the cycle as a whole is listed with the same		
+          fields as a function entry.  Below it are listed	
+          the members of the cycle, and their contributions	
+          to the time and call counts of the cycle.		
+								
+
+granularity: each sample hit covers 4 byte(s) for 0.00% of 118.97 seconds
+
+                                  called/total       parents 
+index  %time    self descendents  called+self    name    	index
+                                  called/total       children
+
+                                                     <spontaneous>
+[1]    100.0    0.00      118.97                 main [1]
+                0.00      118.87       1/1           search_tree [2]
+                0.00        0.09       1/1           create_pos_lists [10]
+                0.00        0.00       1/1           restrict_pos_lists [17]
+                0.00        0.00       1/1           read_pieces [27]
+                0.00        0.00       1/1           sort_pieces [38]
+
+-----------------------------------------------
+
+                0.00      118.87       1/1           main [1]
+[2]     99.9    0.00      118.87       1         search_tree [2]
+                0.30      118.57       2/2           go [3]
+                0.00        0.00       2/638329      find_pos [4]
+                0.00        0.00       1/2           prt_time [37]
+
+-----------------------------------------------
+
+                                  319218             go [3]
+                0.30      118.57       2/2           search_tree [2]
+[3]     99.9    0.30      118.57       2+319218  go [3]
+               12.47      105.39  638327/638329      find_pos [4]
+                0.42        0.00  319208/2394980     f_rm [8]
+                0.30        0.00  319220/2394992     f_set [9]
+                0.00        0.00     100/100         display_it [33]
+                                  319218             go [3]
+
+-----------------------------------------------
+
+                0.00        0.00       2/638329      search_tree [2]
+               12.47      105.39  638327/638329      go [3]
+[4]     99.1   12.47      105.39  638329         find_pos [4]
+               15.82       46.06 2073716/2075772     f_plausible [5]
+               43.50        0.00 61341390/61341390     f_fits [6]
+
+-----------------------------------------------
+
+                0.02        0.05    2056/2075772     create_pos_lists [10]
+               15.82       46.06 2073716/2075772     find_pos [4]
+[5]     52.1   15.84       46.11 2075772         f_plausible [5]
+               41.46        0.00 37149948/37149948     f_fill [7]
+                2.72        0.00 2075772/2394980     f_rm [8]
+                1.92        0.00 2075772/2394992     f_set [9]
+
+-----------------------------------------------
+
+               43.50        0.00 61341390/61341390     find_pos [4]
+[6]     36.6   43.50        0.00 61341390         f_fits [6]
+
+-----------------------------------------------
+
+                                 26996117             f_fill [7]
+               41.46        0.00 37149948/37149948     f_plausible [5]
+[7]     34.9   41.46        0.00 37149948+26996117 f_fill [7]
+                                 26996117             f_fill [7]
+
+-----------------------------------------------
+
+                0.42        0.00  319208/2394980     go [3]
+                2.72        0.00 2075772/2394980     f_plausible [5]
+[8]      2.6    3.14        0.00 2394980         f_rm [8]
+
+-----------------------------------------------
+
+                0.30        0.00  319220/2394992     go [3]
+                1.92        0.00 2075772/2394992     f_plausible [5]
+[9]      1.9    2.22        0.00 2394992         f_set [9]
+
+-----------------------------------------------
+
+                0.00        0.09       1/1           main [1]
+[10]     0.1    0.00        0.09       1         create_pos_lists [10]
+                0.02        0.05    2056/2075772     f_plausible [5]
+                0.00        0.02    1917/1929        t_add_pos [11]
+                0.00        0.00    2056/2056        p_down [13]
+                0.00        0.00      12/12          rotate [15]
+                0.00        0.00     573/609         p_identity [16]
+                0.00        0.00     649/979         p_free [21]
+                0.00        0.00     510/510         p_right [22]
+                0.00        0.00      12/120         p_shift_lu [19]
+                0.00        0.00      12/12          p_flush [29]
+                0.00        0.00    1928/2165        f_cmp [30]
+
+-----------------------------------------------
+
+                0.00        0.00      12/1929        add_line [26]
+                0.00        0.02    1917/1929        create_pos_lists [10]
+[11]     0.0    0.00        0.02    1929         t_add_pos [11]
+                0.02        0.00    1929/1992        p_add [12]
+
+-----------------------------------------------
+
+                0.00        0.00      63/1992        rotate [15]
+                0.02        0.00    1929/1992        t_add_pos [11]
+[12]     0.0    0.02        0.00    1992         p_add [12]
+
+-----------------------------------------------
+
+                0.00        0.00    2056/2056        create_pos_lists [10]
+[13]     0.0    0.00        0.00    2056         p_down [13]
+                0.00        0.00    1546/2722        p_alloc [14]
+
+-----------------------------------------------
+
+                0.00        0.00      12/2722        p_mirror_x [28]
+                0.00        0.00      12/2722        add_line [26]
+                0.00        0.00      48/2722        p_turn_90 [24]
+                0.00        0.00      48/2722        p_turn_180 [23]
+                0.00        0.00     447/2722        p_right [22]
+                0.00        0.00     609/2722        p_identity [16]
+                0.00        0.00    1546/2722        p_down [13]
+[14]     0.0    0.00        0.00    2722         p_alloc [14]
+
+-----------------------------------------------
+
+                0.00        0.00      12/12          create_pos_lists [10]
+[15]     0.0    0.00        0.00      12         rotate [15]
+                0.00        0.00      96/96          form_exists [20]
+                0.00        0.00      63/1992        p_add [12]
+                0.00        0.00      24/24          p_turn_270 [25]
+                0.00        0.00      24/48          p_turn_180 [23]
+                0.00        0.00      24/48          p_turn_90 [24]
+                0.00        0.00      12/12          p_mirror_x [28]
+                0.00        0.00      36/609         p_identity [16]
+                0.00        0.00      57/979         p_free [21]
+
+-----------------------------------------------
+
+                0.00        0.00      36/609         rotate [15]
+                0.00        0.00     573/609         create_pos_lists [10]
+[16]     0.0    0.00        0.00     609         p_identity [16]
+                0.00        0.00     609/2722        p_alloc [14]
+                0.00        0.00     609/609         f_copy [31]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           main [1]
+[17]     0.0    0.00        0.00       1         restrict_pos_lists [17]
+                0.00        0.00     210/979         p_free [21]
+
+-----------------------------------------------
+
+                0.00        0.00     458/458         p_shift_lu [19]
+[18]     0.0    0.00        0.00     458         p_up [18]
+
+-----------------------------------------------
+
+                0.00        0.00      12/120         p_mirror_x [28]
+                0.00        0.00      12/120         create_pos_lists [10]
+                0.00        0.00      48/120         p_turn_90 [24]
+                0.00        0.00      48/120         p_turn_180 [23]
+[19]     0.0    0.00        0.00     120         p_shift_lu [19]
+                0.00        0.00     458/458         p_up [18]
+                0.00        0.00     440/440         p_left [32]
+
+-----------------------------------------------
+
+                0.00        0.00      96/96          rotate [15]
+[20]     0.0    0.00        0.00      96         form_exists [20]
+                0.00        0.00     237/2165        f_cmp [30]
+
+-----------------------------------------------
+
+                0.00        0.00      57/979         rotate [15]
+                0.00        0.00      63/979         p_flush [29]
+                0.00        0.00     210/979         restrict_pos_lists [17]
+                0.00        0.00     649/979         create_pos_lists [10]
+[21]     0.0    0.00        0.00     979         p_free [21]
+
+-----------------------------------------------
+
+                0.00        0.00     510/510         create_pos_lists [10]
+[22]     0.0    0.00        0.00     510         p_right [22]
+                0.00        0.00     447/2722        p_alloc [14]
+
+-----------------------------------------------
+
+                0.00        0.00      24/48          p_turn_270 [25]
+                0.00        0.00      24/48          rotate [15]
+[23]     0.0    0.00        0.00      48         p_turn_180 [23]
+                0.00        0.00      48/120         p_shift_lu [19]
+                0.00        0.00      48/2722        p_alloc [14]
+
+-----------------------------------------------
+
+                0.00        0.00      24/48          p_turn_270 [25]
+                0.00        0.00      24/48          rotate [15]
+[24]     0.0    0.00        0.00      48         p_turn_90 [24]
+                0.00        0.00      48/120         p_shift_lu [19]
+                0.00        0.00      48/2722        p_alloc [14]
+
+-----------------------------------------------
+
+                0.00        0.00      24/24          rotate [15]
+[25]     0.0    0.00        0.00      24         p_turn_270 [25]
+                0.00        0.00      24/48          p_turn_180 [23]
+                0.00        0.00      24/48          p_turn_90 [24]
+
+-----------------------------------------------
+
+                0.00        0.00      30/30          read_pieces [27]
+[26]     0.0    0.00        0.00      30         add_line [26]
+                0.00        0.00      12/1929        t_add_pos [11]
+                0.00        0.00      12/2722        p_alloc [14]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           main [1]
+[27]     0.0    0.00        0.00       1         read_pieces [27]
+                0.00        0.00      30/30          add_line [26]
+                0.00        0.00      12/12          f_print [34]
+                0.00        0.00      12/12          t_alloc [36]
+                0.00        0.00      12/12          t_add [35]
+
+-----------------------------------------------
+
+                0.00        0.00      12/12          rotate [15]
+[28]     0.0    0.00        0.00      12         p_mirror_x [28]
+                0.00        0.00      12/120         p_shift_lu [19]
+                0.00        0.00      12/2722        p_alloc [14]
+
+-----------------------------------------------
+
+                                      51             p_flush [29]
+                0.00        0.00      12/12          create_pos_lists [10]
+[29]     0.0    0.00        0.00      12+51      p_flush [29]
+                0.00        0.00      63/979         p_free [21]
+                                      51             p_flush [29]
+
+-----------------------------------------------
+
+                0.00        0.00     237/2165        form_exists [20]
+                0.00        0.00    1928/2165        create_pos_lists [10]
+[30]     0.0    0.00        0.00    2165         f_cmp [30]
+
+-----------------------------------------------
+
+                0.00        0.00     609/609         p_identity [16]
+[31]     0.0    0.00        0.00     609         f_copy [31]
+
+-----------------------------------------------
+
+                0.00        0.00     440/440         p_shift_lu [19]
+[32]     0.0    0.00        0.00     440         p_left [32]
+
+-----------------------------------------------
+
+                0.00        0.00     100/100         go [3]
+[33]     0.0    0.00        0.00     100         display_it [33]
+                0.00        0.00       1/2           prt_time [37]
+
+-----------------------------------------------
+
+                0.00        0.00      12/12          read_pieces [27]
+[34]     0.0    0.00        0.00      12         f_print [34]
+
+-----------------------------------------------
+
+                0.00        0.00      12/12          read_pieces [27]
+[35]     0.0    0.00        0.00      12         t_add [35]
+
+-----------------------------------------------
+
+                0.00        0.00      12/12          read_pieces [27]
+[36]     0.0    0.00        0.00      12         t_alloc [36]
+
+-----------------------------------------------
+
+                0.00        0.00       1/2           display_it [33]
+                0.00        0.00       1/2           search_tree [2]
+[37]     0.0    0.00        0.00       2         prt_time [37]
+
+-----------------------------------------------
+
+                0.00        0.00       1/1           main [1]
+[38]     0.0    0.00        0.00       1         sort_pieces [38]
+
+-----------------------------------------------
+
+
+								
+								
+								
+flat profile:							
+								
+								
+ %         the percentage of the total running time of the	
+time       program used by this function.			
+								
+cumulative a running sum of the number of seconds accounted	
+ seconds   for by this function and those listed above it.	
+								
+ self      the number of seconds accounted for by this		
+seconds    function alone.  This is the major sort for this	
+           listing.						
+								
+calls      the number of times this function was invoked, if	
+           this function is profiled, else blank.		
+							 	
+ self      the average number of milliseconds spent in this	
+ms/call    function per call, if this function is profiled,	
+	   else blank.						
+								
+ total     the average number of milliseconds spent in this	
+ms/call    function and its descendents per call, if this 	
+	   function is profiled, else blank.			
+								
+name       the name of the function.  This is the minor sort	
+           for this listing. The index shows the location of	
+	   the function in the gprof listing. If the index is	
+	   in parenthesis it shows where it would appear in	
+	   the gprof listing if it were to be printed.		
+								
+
+granularity: each sample hit covers 4 byte(s) for 0.00% of 118.97 seconds
+
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  ms/call  ms/call  name    
+ 36.6      43.50    43.50 61341390     0.00     0.00  f_fits [6]
+ 34.9      84.97    41.46 37149948     0.00     0.00  f_fill [7]
+ 13.3     100.80    15.84  2075772     0.01     0.03  f_plausible [5]
+ 10.5     113.27    12.47   638329     0.02     0.18  find_pos [4]
+  2.6     116.41     3.14  2394980     0.00     0.00  f_rm [8]
+  1.9     118.63     2.22  2394992     0.00     0.00  f_set [9]
+  0.3     118.93     0.30        2   151.37 59434.96  go [3]
+  0.0     118.95     0.02     1992     0.01     0.01  p_add [12]
+  0.0     118.96     0.00        1     3.91    98.10  create_pos_lists [10]
+  0.0     118.96     0.00     2722     0.00     0.00  p_alloc [14]
+  0.0     118.96     0.00     2056     0.00     0.00  p_down [13]
+  0.0     118.96     0.00     1929     0.00     0.01  t_add_pos [11]
+  0.0     118.97     0.00      979     0.00     0.00  p_free [21]
+  0.0     118.97     0.00      609     0.00     0.00  p_identity [16]
+  0.0     118.97     0.00      458     0.00     0.00  p_up [18]
+  0.0     118.97     0.00       96     0.01     0.01  form_exists [20]
+  0.0     118.97     0.00        1     0.98     1.19  restrict_pos_lists [17]
+  0.0     118.97     0.00     2165     0.00     0.00  f_cmp [30]
+  0.0     118.97     0.00      609     0.00     0.00  f_copy [31]
+  0.0     118.97     0.00      510     0.00     0.00  p_right [22]
+  0.0     118.97     0.00      440     0.00     0.00  p_left [32]
+  0.0     118.97     0.00      120     0.00     0.01  p_shift_lu [19]
+  0.0     118.97     0.00      100     0.00     0.00  display_it [33]
+  0.0     118.97     0.00       48     0.00     0.01  p_turn_180 [23]
+  0.0     118.97     0.00       48     0.00     0.01  p_turn_90 [24]
+  0.0     118.97     0.00       30     0.00     0.01  add_line [26]
+  0.0     118.97     0.00       24     0.00     0.02  p_turn_270 [25]
+  0.0     118.97     0.00       12     0.00     0.00  f_print [34]
+  0.0     118.97     0.00       12     0.00     0.01  p_flush [29]
+  0.0     118.97     0.00       12     0.00     0.01  p_mirror_x [28]
+  0.0     118.97     0.00       12     0.00     0.24  rotate [15]
+  0.0     118.97     0.00       12     0.00     0.00  t_add [35]
+  0.0     118.97     0.00       12     0.00     0.00  t_alloc [36]
+  0.0     118.97     0.00        2     0.00     0.00  prt_time [37]
+  0.0     118.97     0.00        1     0.00     0.15  read_pieces [27]
+  0.0     118.97     0.00        1     0.00 118870.28  search_tree [2]
+  0.0     118.97     0.00        1     0.00     0.00  sort_pieces [38]
+
+Index by function name
+
+  [26] add_line              [3] go                   [24] p_turn_90          
+  [10] create_pos_lists     [12] p_add                [18] p_up               
+  [33] display_it           [14] p_alloc              [37] prt_time           
+  [30] f_cmp                [13] p_down               [27] read_pieces        
+  [31] f_copy               [29] p_flush              [17] restrict_pos_lists 
+   [7] f_fill               [21] p_free               [15] rotate             
+   [6] f_fits               [16] p_identity            [2] search_tree        
+   [5] f_plausible          [32] p_left               [38] sort_pieces        
+  [34] f_print              [28] p_mirror_x           [35] t_add              
+   [8] f_rm                 [22] p_right              [11] t_add_pos          
+   [9] f_set                [19] p_shift_lu           [36] t_alloc            
+   [4] find_pos             [23] p_turn_180         
+  [20] form_exists          [25] p_turn_270         

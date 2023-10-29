@@ -1,0 +1,23 @@
+This is a test initialisation file for PENTOMINO (ahu, 16.06.95)
+
+Each piece definition consists of an identifier (`PIECE ' - note the blank -
+at the beginning of a line, followed by a name (the rest of the line) and
+several definition lines, also starting at the beginning of the line.
+Anything else is comment, i.e. ignored.
+
+PIECE fill it up
+11111
+11111
+11111
+11111
+11111
+1111
+
+PIECE fill it up
+11111
+11111
+11111
+11111
+11111
+11111
+

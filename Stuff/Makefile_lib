@@ -1,0 +1,41 @@
+#                                    ahu, 24-JUN-1995
+# Makefile for Pentomino
+# uses macros, implied dependencies and constructions
+
+# run in silent mode (don't echo commands)
+.SILENT:
+
+# makro definitions:
+CC = cc				# Default value
+AR = ar
+AROPT = r
+RM = \rm
+CFLAGS =
+
+AOUT  = pentomino
+OBJS  = data.o ini.o pentomino.o
+HEADS = data.h ini.h pentomino.h
+LIB   = ./libpent.a
+
+%.o: %.c
+	@echo compiling $*.c
+	$(CC) -c $*.c
+	$(AR) $(AROPT) $(LIB) $*.o
+	$(RM) $*.o
+
+# dependency lines and construction commands:
+all: $(AOUT)
+
+$(AOUT): $(LIB)
+	$(CC) -o $@ $(LIB)
+
+$(LIB): $(LIB)($(OBJS))
+
+pentomino.o: $(HEADS)
+
+ini.o:       $(HEADS)
+
+data.o:      $(HEADS)
+
+clean:
+	$(RM) $(AOUT) *.o *~ $(LIB)

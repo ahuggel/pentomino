@@ -1,0 +1,34 @@
+Global: Use only prg.progname and prg.inifile instead of passing them to functions
+        Memory layout studieren: nach dem sortieren eines zufaelligen inifiles
+        sollte es aehnlich aussehen wie wenn das default pentomino.ini gelesen wird
+        Get all data-members except 'next' via 'data' functions 
+        Grep "->" *.[ch] sollte nur next Zeiger bringen
+	Vernuenftiger Einsatz von const
+
+
+data.[ch]: f_plausible: Der Check mit % 5 ist zu wenig allgemein.
+                        Was passiert beim ersten Element in der Pos-liste?
+                        test_field static machen (performance ?)
+	                
+ini.[ch]: Restrict_pos_lists(): viel allgemeiner!
+	  wegen restrict... stimmt die Anzahl pos nicht mehr.
+          erlaube Whitespace nach `PIECE' und vor dem Namen anstatt genau ein Blank
+          FIELD 10x6 einlesen aus dem inifile
+
+disp.[ch] Mit den Darstellungen: use curses.h as a first try.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

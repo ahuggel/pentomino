@@ -1,0 +1,294 @@
+/************************************************/
+/* PENTOMINO          written by Andreas Huggel */
+/*                                              */
+/* print.c                                      */
+/* Provides functions for simple tty output.    */
+/************************************************/
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "pentomino.h"
+#include "data.h"
+#include "setup.h"
+#ifdef SCARCH
+#include <unistd.h>
+#include "scarch.h"
+#endif
+#include "print.h"
+
+/* Background color codes lookup table */
+char* colors[] = {
+    "\033[41m",
+    "\033[42m",
+    "\033[43m",
+    "\033[44m",
+    "\033[45m",
+    "\033[46m",
+    "\033[47m",
+    "\033[100m",
+    "\033[101m",
+    "\033[103m",
+    "\033[105m",
+    "\033[106m",
+    "\033[104m",
+    "\033[102m"
+};
+
+#define NUM_COLORS 14
+
+/******************************/
+/* we found a solution, so... */
+/******************************/
+
+/* this is just a first and very quick try */
+void display_it(void)
+#ifdef TIME_ONLY
+{
+   static int  counter=0;
+
+#ifdef SCARCH
+   cntT *all_counter;
+   
+   all_counter = (cntT *)prctl.shmaddr;
+#endif /* SCARCH */
+   
+   counter++; /* increase the per process counter */
+
+#ifdef SCARCH   
+
+   P (prctl.semid);
+
+#ifdef DEBUG
+   fprintf (stdout, "pid %d: Semaphore acquired\n", (int) prctl.pid);
+   fprintf (stdout, "all_counter before inc: %d\n", *all_counter);   
+#endif /* DEBUG */
+
+   (*all_counter)++; /* increase the global counter, too */
+
+#ifdef DEBUG
+   fprintf (stdout, "pid %d: Semaphore released\n", (int) prctl.pid);
+#endif /* DEBUG */
+
+   V (prctl.semid);
+
+   if ((*all_counter % INTERVAL) == 0)
+   {      
+      fprintf (stdout, "pid %d: total %d, this process %d\n",
+               (int) prctl.pid, *all_counter, counter);
+   }
+   if (*all_counter == MAX_SOLUTIONS)
+   {
+      prt_time (stderr);      
+   }
+   if (*all_counter >= MAX_SOLUTIONS)
+   {
+      fprintf (stdout, "pid %d: %d\n", (int) prctl.pid, counter);
+      exit (0);
+   }
+   
+#else /* ! SCARCH */     
+
+   if ((counter % INTERVAL) == 0)
+   {      
+      fprintf (stdout, "%d\n", counter);
+   }
+   if (counter == MAX_SOLUTIONS)
+   {
+      prt_time (stdout);       
+      exit (0);
+   }
+
+#endif /* ! SCARCH */
+
+}
+
+#else /* ! TIME_ONLY */
+
+{
+   brickT *disp;
+   char brick='a';
+   
+   struct tnode *piece;
+   struct pnode *pos;
+   int i,j;
+   static int  counter=0;
+
+#ifdef SCARCH   
+   cntT *all_counter;
+   
+   all_counter = (cntT *)prctl.shmaddr;
+#endif /* SCARCH */   
+   
+   counter++; /* increase the per process counter */
+
+#ifdef SCARCH   
+
+   P (prctl.semid);
+
+#ifdef DEBUG
+   fprintf (stdout, "pid %d: Semaphore acquired\n", (int) prctl.pid);
+   fprintf (stdout, "all_counter before inc: %d\n", *all_counter);   
+#endif /* DEBUG */
+
+   (*all_counter)++; /* increase the global counter, too */
+
+#endif /* SCARCH */
+   
+   /* now print the solution as a brick field */
+
+   disp = b_alloc();
+
+   /* fill the array with all pieces */
+   
+   for (piece=gme.first_piece; piece != NULL; piece=piece->next)
+   {
+      pos = piece->pos;
+      
+      if (pos != NULL)
+      {
+	 for (i=0; i<YDIM; i++)
+	 {     
+	    for (j=0; j<XDIM; j++)
+	    {
+	       if (f_testxy (pos->field, j, i))
+	       {
+                  b_setxy (disp, j, i, brick);
+	       }
+	    }
+	 }
+	 brick++;
+      }
+   }
+
+   if (prg.verbose)
+   {
+      /* print general info */
+
+#ifdef SCARCH
+      fprintf (stdout, "%d. Solution (%d. for pid %d):\n",
+               *all_counter, counter, (int) prctl.pid);
+#else /* ! SCARCH */
+      fprintf (stdout, "%d. Solution:\n", counter);
+#endif /* ! SCARCH */
+      
+      prt_time (stdout);
+      fprintf (stdout, "\n");
+
+      /* print the brick field */
+
+      print_bfield (*disp);
+      fprintf (stdout, "\n\n");
+   }
+   else
+   {
+      /* print only a simple brick field */
+      
+      print_bfield (*disp);
+      fprintf (stdout, "\n");
+   }
+
+   b_free (disp);
+
+#ifdef SCARCH
+   
+#ifdef DEBUG
+   fprintf (stdout, "pid %d: Semaphore released\n", (int) prctl.pid);
+#endif /* DEBUG */
+
+   fflush(stdout);
+   V (prctl.semid);
+
+#endif /* SCARCH */
+
+}
+
+#endif /* ! TIME_ONLY */
+
+/****************************/
+/* print the list of pieces */
+/****************************/
+
+void list_pieces(void)
+{
+   struct tnode *curr_piece;
+   
+   for (curr_piece  = gme.first_piece;
+        curr_piece != NULL;
+        curr_piece  = curr_piece->next)
+   {
+      fprintf(stdout,"%s\t%2i\t: %2i Ones, %3i Pos.\n",
+              curr_piece->name, curr_piece->number,
+              curr_piece->one_count, curr_piece->pos_count);
+   }
+   fprintf(stdout,"\n");
+}
+
+
+/***************************/
+/* print a field to stdout */
+/***************************/
+
+void print_field(struct fieldT field)
+{
+   int i,j;
+
+   for (i=0; i<YDIM; i++)
+   {     
+      for (j=0; j<XDIM; j++)
+      {
+         fprintf(stdout, "%c", (f_testxy(field, j, i) ? FIELD_SET
+                                                      : FIELD_NOT_SET));
+      }
+      fprintf(stdout, "%c",'\n');
+   }
+}
+
+
+/*********************************/
+/* print a brick field to stdout */
+/*********************************/
+
+void print_bfield(brickT bfield)
+{
+   int i,j;
+
+   if (prg.color) {
+      for (i=0; i<YDIM; i++)
+      {     
+         for (j=0; j<XDIM; j++)
+         {
+            fprintf(stdout, "%s  ", colors[(b_getxy(bfield, j, i) - 'a') % NUM_COLORS]);
+         }
+         fprintf(stdout, "\033[0m\n");
+      }
+   } else {
+      for (i=0; i<YDIM; i++)
+      {     
+         for (j=0; j<XDIM; j++)
+         {
+            fprintf(stdout, "%c", b_getxy(bfield, j, i));
+         }
+         fprintf(stdout, "%c",'\n');
+      }
+   }
+}
+
+
+
+/**************************/
+/* prints the system time */
+/**************************/
+
+void prt_time(FILE *out_stream)
+{
+   time_t time_now;
+   
+   time_now = time(NULL);
+
+   if (time_now != -1 && out_stream != NULL)
+   {
+      fprintf(out_stream, "%s", ctime(&time_now));
+   }
+}   
