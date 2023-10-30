@@ -281,7 +281,7 @@ void print_bfield(brickT bfield)
          for (j=0; j<XDIM; j++)
          {
             a = b_getxy(bfield, j, i);
-            c = a == EMPTY_BRICK ? EMPTY_BRICK_COLOR : colors[(a - 'a') % NUM_COLORS];
+            c = a == EMPTY_BRICK ? EMPTY_BRICK_COLOR : colors[abs(a - 'a') % NUM_COLORS];
             fprintf(stdout, "%s  ", c);
          }
          fprintf(stdout, "\033[0m\n");
