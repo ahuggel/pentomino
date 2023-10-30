@@ -8,11 +8,11 @@ How many different solutions does this puzzle have?
 This little puzzle resurfaced the other day when we were looking for board games to play. I call it Pentomino and have had it for a very long time. It has always fascinated me because it is so difficult, yet whenever you finally find a solution, it seems to be a new one. Thus the question. 
 
 A long time ago, in 1995, while I worked on my first job, I decided to write a C-program to find the answer, and after cracking my head for quite a while, my pentomino program eventually printed out every possible solution.
-This repository has the old source code, which compiles fine on my laptop in the Windows Subsystem for Linux.
+This repository has the old source code, which compiles fine on my laptop in the Windows Subsystem for Linux, with just a few modifications added after unearthing it.
 
 Back in 1995, the task took my home PC a solid 25min to complete. Today, on my laptop, it needs less than 4s!
 
-So how many different solutions do you think there are?
+So, how many different solutions do you think there are?
 
 ## License
 
