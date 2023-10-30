@@ -86,13 +86,4 @@ play.o:      setup.h play.h print.h $(HEADS)
 scarch.o:    play.h scarch.h ${HEADS}
 
 clean:
-	$(RM) $(AOUT) *.o *~
-
-
-
-
-
-
-
-
-
+	$(RM) $(AOUT) *.o *~ .*~
