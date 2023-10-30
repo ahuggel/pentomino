@@ -245,11 +245,12 @@ void read_try(void)
 
    fclose(fp);
    
-#ifdef DEBUG
-   fprintf(stdout, "Field read from %s:\n", prg.tryfile);
-   print_bfield(*try);
-   fprintf(stdout, "\n");
-#endif   
+   if (prg.verbose)
+   {
+      fprintf(stdout, "Field read from %s:\n", prg.tryfile);
+      print_bfield(*try);
+      fprintf(stdout, "\n");
+   }
 
    parse_try(try);
 

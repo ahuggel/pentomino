@@ -55,6 +55,7 @@ char* colors[] = {
 };
 
 #define NUM_COLORS 14
+#define EMPTY_BRICK_COLOR "\033[40m"
 
 /******************************/
 /* we found a solution, so... */
@@ -271,13 +272,17 @@ void print_field(struct fieldT field)
 void print_bfield(brickT bfield)
 {
    int i,j;
+   char a;
+   char *c;
 
    if (prg.color) {
       for (i=0; i<YDIM; i++)
       {     
          for (j=0; j<XDIM; j++)
          {
-            fprintf(stdout, "%s  ", colors[(b_getxy(bfield, j, i) - 'a') % NUM_COLORS]);
+            a = b_getxy(bfield, j, i);
+            c = a == EMPTY_BRICK ? EMPTY_BRICK_COLOR : colors[(a - 'a') % NUM_COLORS];
+            fprintf(stdout, "%s  ", c);
          }
          fprintf(stdout, "\033[0m\n");
       }
