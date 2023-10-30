@@ -71,7 +71,7 @@ void read_pieces(struct tnode **first_piece, unsigned int *piece_count)
    while ((fgets(fline, MAXLINE, fp)) != NULL)
    {
       line_ctr++;
-	 
+         
       if (strlen(fline) >= piece_id_len &&
           0 == strncmp(fline, PIECE_ID, piece_id_len))
       {
@@ -100,10 +100,10 @@ void read_pieces(struct tnode **first_piece, unsigned int *piece_count)
 
          curr_piece = t_alloc(tname, tnum);
          t_add(first_piece, curr_piece);
-         (*piece_count)++;	    
+         (*piece_count)++;            
 
       } /* if (strlen(fline) >= ...)) */
-	 
+         
       else if (curr_piece != NULL        &&
                (fline[0] == LINE_ID_0 ||
                 fline[0] == LINE_ID_1   )  )
@@ -147,8 +147,8 @@ void read_pieces(struct tnode **first_piece, unsigned int *piece_count)
 /***************************************************/
 
 static void add_line(struct tnode *curr_piece,
-		     char *fline,
-		     int line_ctr)
+        	     char *fline,
+        	     int line_ctr)
 {
    static struct tnode *same_piece=NULL;
    static int y_ctr=0;
@@ -159,7 +159,7 @@ static void add_line(struct tnode *curr_piece,
    if (curr_piece == NULL)
    {
       fprintf(stderr, "%s: %s, line %d: Pointer to piece in add_line() is NULL",
-	      prg.progname, prg.inifile, line_ctr);
+              prg.progname, prg.inifile, line_ctr);
       exit(1);
    }
    
@@ -173,8 +173,8 @@ static void add_line(struct tnode *curr_piece,
    if (++y_ctr > YDIM)
    {
       fprintf(stderr, "%s: %s, line %d: Too many definition lines for "
-	      "piece %s (No. %d)\n", prg.progname, prg.inifile, line_ctr,
-	      curr_piece->name, curr_piece->number);
+              "piece %s (No. %d)\n", prg.progname, prg.inifile, line_ctr,
+              curr_piece->name, curr_piece->number);
       exit(1);
    }
 

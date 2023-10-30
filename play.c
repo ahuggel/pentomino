@@ -110,7 +110,7 @@ void go(struct tnode *piece)
    {
       while( find_pos(piece->next) )
       {
-	 go(piece->next);
+         go(piece->next);
       }
    }
    
@@ -155,7 +155,7 @@ int f_plausible1(struct fieldT field, struct pnode *pos)
    {     
       for (j=0; j<XDIM && ok; j++)
       {
-	 ok = (f_fill(&test_field, j, i) % gme.piece_sizes == 0);
+         ok = (f_fill(&test_field, j, i) % gme.piece_sizes == 0);
       }
    }
    

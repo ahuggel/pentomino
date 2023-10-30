@@ -58,8 +58,8 @@ void create_pos_lists(void)
    
    /* Ueber alle Teilchen ... */   
    for (curr_piece = gme.first_piece;
-	curr_piece != NULL;
-	curr_piece = curr_piece->next)
+        curr_piece != NULL;
+        curr_piece = curr_piece->next)
    {
       /* Schiebe die allererste Position (aus inifile) in die linke obere Ecke */
       p_shift_lu(curr_piece->pos_list);
@@ -70,35 +70,35 @@ void create_pos_lists(void)
       /* Ueber alle Drehungen und Spiegelungen ... */
       for (curr_rot = rot_list; curr_rot != NULL; curr_rot = curr_rot->next)
       {
-	 /* Schiebe die Position auf dem ganzen Feld herum ...*/
-	 currx_pos  = p_identity(curr_rot);
-	 while (currx_pos != NULL)
-	 {
-	    tmpx_pos   = currx_pos;
-	    currx_pos  = p_right(tmpx_pos);
+         /* Schiebe die Position auf dem ganzen Feld herum ...*/
+         currx_pos  = p_identity(curr_rot);
+         while (currx_pos != NULL)
+         {
+            tmpx_pos   = currx_pos;
+            currx_pos  = p_right(tmpx_pos);
 
-	    curry_pos  = p_identity(tmpx_pos);
-	    while (curry_pos != NULL)
-	    {
-	       tmpy_pos   = curry_pos;
-	       curry_pos  = p_down(tmpy_pos);
-	       
-	       /* Uebernimm die Position in die Liste falls der Check OK ist */
-	       /* und die Position nicht die allererste ist                  */
-	       if ( gme.f_plausible_fct(tmpy_pos->field, NULL) &&
-		   !f_cmp(tmpy_pos->field, rot_list->field)      )
-	       {
-		  t_add_pos(&curr_piece, tmpy_pos);
-	       }
-	       else
-	       {
-		  p_free(&tmpy_pos);
-	       }
-	    }
+            curry_pos  = p_identity(tmpx_pos);
+            while (curry_pos != NULL)
+            {
+               tmpy_pos   = curry_pos;
+               curry_pos  = p_down(tmpy_pos);
+               
+               /* Uebernimm die Position in die Liste falls der Check OK ist */
+               /* und die Position nicht die allererste ist                  */
+               if ( gme.f_plausible_fct(tmpy_pos->field, NULL) &&
+        	   !f_cmp(tmpy_pos->field, rot_list->field)      )
+               {
+        	  t_add_pos(&curr_piece, tmpy_pos);
+               }
+               else
+               {
+        	  p_free(&tmpy_pos);
+               }
+            }
 
-	    p_free(&tmpx_pos);
-	    
-	 }
+            p_free(&tmpx_pos);
+            
+         }
       }   /* for (curr_rot = ... ) */
 
       p_flush(&rot_list);
@@ -129,19 +129,19 @@ static struct pnode *rotate(struct pnode *first_pos)
 
       for (j=0; *p_turn_fct[j] != NULL; j++)
       {
-	 turned_pos = (*p_turn_fct[j])(mirrored_pos);
+         turned_pos = (*p_turn_fct[j])(mirrored_pos);
 
-	 if (turned_pos != NULL)
-	 {
-	    if (form_exists(turned_pos, first_rot))
-	    {
-	       p_free(&turned_pos);
-	    }
-	    else
-	    {
-	       p_add(&first_rot, turned_pos);
-	    }
-	 }
+         if (turned_pos != NULL)
+         {
+            if (form_exists(turned_pos, first_rot))
+            {
+               p_free(&turned_pos);
+            }
+            else
+            {
+               p_add(&first_rot, turned_pos);
+            }
+         }
       }
       
       p_free(&mirrored_pos);
@@ -163,9 +163,9 @@ static struct pnode *form_exists(struct pnode *pos, struct pnode *plist)
    struct pnode *curr_pos = NULL;
    
    for (curr_pos = plist;
-	curr_pos != NULL && !f_cmp(curr_pos->field, pos->field);
-	curr_pos = curr_pos->next);
-	
+        curr_pos != NULL && !f_cmp(curr_pos->field, pos->field);
+        curr_pos = curr_pos->next);
+        
    return curr_pos;
 }
 
@@ -265,32 +265,32 @@ void restrict_pos_lists(void)
       
       for (i=4; i<YDIM && !free_it; i++)
       {     
-	 for (j=0; j<XDIM && !free_it; j++)
-	 {
-	    if (f_testxy((*pos)->field, j, i))
-	    {
-	       free_it = TRUE;
-	    }
-	 }
+         for (j=0; j<XDIM && !free_it; j++)
+         {
+            if (f_testxy((*pos)->field, j, i))
+            {
+               free_it = TRUE;
+            }
+         }
       }
       for (i=0; i<4 && !free_it; i++)
       {     
-	 for (j=6; j<XDIM && !free_it; j++)
-	 {
-	    if (f_testxy((*pos)->field, j, i))
-	    {
-	       free_it = TRUE;
-	    }
-	 }
+         for (j=6; j<XDIM && !free_it; j++)
+         {
+            if (f_testxy((*pos)->field, j, i))
+            {
+               free_it = TRUE;
+            }
+         }
       }
       
       if (free_it)
       {
-	 p_free(pos);
+         p_free(pos);
       }
       else
       {
-	 pos = &(*pos)->next;
+         pos = &(*pos)->next;
       }
    }
 }
@@ -371,7 +371,7 @@ void parse_try(brickT *bfield)
    if (0 == (multi_use = (int *)calloc(gme.piece_count, sizeof(int))))
    {
       fprintf(stderr, "%s: Can't allocate memory for multi_use array\n",
-	      prg.progname);
+              prg.progname);
       exit(1);
    }
 

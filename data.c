@@ -47,7 +47,7 @@ struct tnode *t_alloc(char *tname, int tnum)
        NULL == (piece->name = (char *)malloc(strlen(tname)+1))             )
    {
       fprintf(stderr, "%s: Can't allocate memory for piece %s (No. %d)\n",
-	      prg.progname, tname, tnum);
+              prg.progname, tname, tnum);
       exit(1);
    }
 
@@ -226,7 +226,7 @@ int p_up(struct pnode *pos)
 
       for (i=0; i<YDIM-1; i++)
       {
-	 pos->field.line[i] = pos->field.line[i+1];
+         pos->field.line[i] = pos->field.line[i+1];
       }
       pos->field.line[YDIM-1] = 0;
    }
@@ -248,15 +248,15 @@ int p_left(struct pnode *pos)
    {
       if (f_testxy(pos->field, 0, i))
       {
-	 ok = NOTOK;
-	 break;
+         ok = NOTOK;
+         break;
       }
    }
    if (ok)
    {
       for (i=0; i<YDIM; i++)
       {
-	 pos->field.line[i] <<= 1;
+         pos->field.line[i] <<= 1;
       }
    }
    return ok;
@@ -279,7 +279,7 @@ struct pnode *p_down(struct pnode *pos)
       
       for (i=YDIM-1; i>0; i--)
       {
-	 new_pos->field.line[i] = pos->field.line[i-1];
+         new_pos->field.line[i] = pos->field.line[i-1];
       }
    }
    return new_pos;
@@ -301,8 +301,8 @@ struct pnode *p_right(struct pnode *pos)
    {
       if (f_testxy(pos->field, XDIM-1, i))
       {
-	 ok = NOTOK;
-	 break;
+         ok = NOTOK;
+         break;
       }
    }
    if (ok)
@@ -311,7 +311,7 @@ struct pnode *p_right(struct pnode *pos)
       
       for (i=0; i<YDIM; i++)
       {
-	 new_pos->field.line[i] = (pos->field.line[i] >> 1);
+         new_pos->field.line[i] = (pos->field.line[i] >> 1);
       }
    }
    return new_pos;
@@ -366,22 +366,22 @@ struct pnode *p_turn_90(struct pnode *pos)
       mask = ~(~0 << (XDIM-YDIM));
       for (i=0; i<YDIM; i++)
       {
-	 if (pos->field.line[i] & mask)
-	 {
-	    ok = NOTOK;
-	    break;
-	 }
+         if (pos->field.line[i] & mask)
+         {
+            ok = NOTOK;
+            break;
+         }
       }
    }
    else
    {
       for (i=XDIM; i<YDIM; i++)
       {
-	 if (pos->field.line[i])
-	 {
-	    ok = NOTOK;
-	    break;
-	 }
+         if (pos->field.line[i])
+         {
+            ok = NOTOK;
+            break;
+         }
       }
    }
    
@@ -394,13 +394,13 @@ struct pnode *p_turn_90(struct pnode *pos)
       
       for (i=0; i<dim; i++)
       {
-	 for (j=0; j<dim; j++) 
-	 {
-	    if (f_testxy(pos->field, j, i))
-	    {
-	       f_setxy(&new_pos->field, i, dim-j-1);
-	    }	
-	 }    
+         for (j=0; j<dim; j++) 
+         {
+            if (f_testxy(pos->field, j, i))
+            {
+               f_setxy(&new_pos->field, i, dim-j-1);
+            }        
+         }    
       }
 /* move the position to the upper edge of its field */
       p_shift_lu(new_pos);
@@ -426,10 +426,10 @@ struct pnode *p_turn_180(struct pnode *pos)
    {
       for (j=0; j<XDIM; j++) 
       {
-	 if (f_testxy(pos->field, j, i))
-	 {
-	    f_setxy(&new_pos->field, XDIM-j-1, YDIM-i-1);
-	 }	
+         if (f_testxy(pos->field, j, i))
+         {
+            f_setxy(&new_pos->field, XDIM-j-1, YDIM-i-1);
+         }        
       }    
    }
       
@@ -531,7 +531,7 @@ void f_set(struct fieldT *field, struct pnode *pos)
    {
       for (i=0; i<YDIM; i++)
       {
-	 field->line[i] |= pos->field.line[i];
+         field->line[i] |= pos->field.line[i];
       }
    }
 }
@@ -549,7 +549,7 @@ void f_rm(struct fieldT *field, struct pnode *pos)
    {
       for (i=0; i<YDIM; i++)
       {
-	 field->line[i] &= ~pos->field.line[i];
+         field->line[i] &= ~pos->field.line[i];
       }
    }
 }
@@ -587,19 +587,19 @@ int f_fill(struct fieldT *field, int x, int y)
 
       if (y+1<YDIM && !f_testxy(*field, x, y+1))
       {
-	 n += f_fill(field, x, y+1);
+         n += f_fill(field, x, y+1);
       }
       if (x+1<XDIM && !f_testxy(*field, x+1, y))
       {
-	 n += f_fill(field, x+1, y);
+         n += f_fill(field, x+1, y);
       }
       if (y-1>=0 && !f_testxy(*field, x, y-1))
       {
-	 n += f_fill(field, x, y-1);
+         n += f_fill(field, x, y-1);
       }
       if (x-1>=0 && !f_testxy(*field, x-1, y))
       {
-	 n += f_fill(field, x-1, y);
+         n += f_fill(field, x-1, y);
       }
    }
 
@@ -660,7 +660,7 @@ void b_setxy(brickT *bfield, int x, int y, unsigned int a)
    else
    {
       fprintf(stderr, "%s: b_setxy: Position (%i,%i) is outside the brick field.\n",
-	      prg.progname, x, y);
+              prg.progname, x, y);
       exit(1);
    }
 }
@@ -681,7 +681,7 @@ char b_getxy(brickT bfield, int x, int y)
    else
    {
       fprintf(stderr, "%s: b_getxy: Position (%i,%i) is outside the brick field.\n",
-	      prg.progname, x, y);
+              prg.progname, x, y);
       exit(1);
    }
    

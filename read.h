@@ -27,10 +27,10 @@
 #ifndef READ_H
 #define READ_H
 
-#define MAXLINE   80		/* max linelength for inifile   */
+#define MAXLINE   80        	/* max linelength for inifile   */
 #define PIECE_ID  "PIECE "      /* piece identifier incl. blank */
-#define LINE_ID_0 '0'		/* definition line identifier 0 */
-#define LINE_ID_1 '1'		/* definition line identifier 1 */
+#define LINE_ID_0 '0'        	/* definition line identifier 0 */
+#define LINE_ID_1 '1'        	/* definition line identifier 1 */
 
 #define F_READ    "r"           /* file read mode               */
 

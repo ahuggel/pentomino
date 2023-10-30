@@ -167,17 +167,17 @@ void display_it(void)
       
       if (pos != NULL)
       {
-	 for (i=0; i<YDIM; i++)
-	 {     
-	    for (j=0; j<XDIM; j++)
-	    {
-	       if (f_testxy (pos->field, j, i))
-	       {
+         for (i=0; i<YDIM; i++)
+         {     
+            for (j=0; j<XDIM; j++)
+            {
+               if (f_testxy (pos->field, j, i))
+               {
                   b_setxy (disp, j, i, brick);
-	       }
-	    }
-	 }
-	 brick++;
+               }
+            }
+         }
+         brick++;
       }
    }
 
