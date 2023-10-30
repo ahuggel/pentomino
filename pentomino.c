@@ -147,8 +147,11 @@ int main(int argc, char *argv[])
    {
       read_try();                      /* read the tryfile */
    }
-   
-   if (gme.piece_sizes == 5)           /* this is not general enough yet */
+
+   /* if we're trying to find a solution for a tryfile, then we can't restrict */
+   /* the position lists, as the position of any piece in the file may be one  */
+   /* one that would get removed.                                              */
+   if (!prg.tryfile && gme.piece_sizes == 5) /* 5 not general enough yet */
    {
       restrict_pos_lists();            /* due to field symmetries */
    }
