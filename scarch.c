@@ -291,12 +291,10 @@ static void cleanup (int sig)
       fprintf (stdout, "pid: %d: Signal %d caught. Cleaning up and exiting...\n",
                prctl.pid, sig);
    }
-   if (prg.verbose)
-   {
-      fprintf (stdout, "Removing semaphore %d and shared memory segment %d\n",
-               prctl.semid, prctl.shmid);
-   }
-
+#ifdef DEBUG
+   fprintf (stdout, "Removing semaphore %d and shared memory segment %d\n",
+            prctl.semid, prctl.shmid);
+#endif
    semctl (prctl.semid, 0, IPC_RMID, NULL);
    shmdt  (prctl.shmaddr);
    shmctl (prctl.shmid, IPC_RMID, NULL);
