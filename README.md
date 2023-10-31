@@ -1,5 +1,4 @@
 ![image](https://raw.githubusercontent.com/ahuggel/pentomino/main/Stuff/pentomino.jpg)
-![image](https://raw.githubusercontent.com/ahuggel/pentomino/main/Stuff/solutions.png)
 
 # Pentomino - A simple Puzzle
 
@@ -13,7 +12,7 @@ Back in 1995, the task took my home PC a solid 25min to complete. Today, on my l
 
 So, how many different solutions do you think there are?
 
-This repository has the old source code, which compiles fine in the Windows Subsystem for Linux running Debian on my laptop, with just a few modifications added after unearthing it.
+This repository has my old source code for the pentomino program, with just a few modifications that I made after unearthing it. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
 
 ## Building
 
@@ -49,6 +48,7 @@ The following command finds and prints all solutions in color:
 ```
 $ ./pentomino -cv pentomino.ini
 ```
+![image](https://raw.githubusercontent.com/ahuggel/pentomino/main/Stuff/solutions.png)
 
 ## License
 
