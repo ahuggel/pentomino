@@ -6,17 +6,17 @@ How many different solutions does this puzzle have?
 
 This little puzzle resurfaced one day during the pandemic when we couldn't go anywhere and were looking for board games to play. I call it Pentomino and have had it for a very long time. It has always fascinated me because it is so difficult, yet whenever you finally find a solution, it seems to be a new one. Thus the question.
 
-A long time ago, in 1995, while I worked on my first job, I decided to write a C-program to find the answer, and after cracking my head over this challenge for quite a while, my pentomino program eventually printed out every possible solution.
+A long time ago, in 1995, I decided to write a C-program to find the answer, and after cracking my head over this challenge for quite a while, my pentomino program eventually printed out every possible solution.
 
-Back in 1995, the task took my home PC a solid 25min to complete. Today, on my laptop, it needs less than 2s!
+Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop, it needs less than 2 seconds!
 
 So, how many different solutions do you think there are?
 
-This repository has my old source code for the pentomino program, with just a few modifications that I made after unearthing it. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
+This repository has the old source code for the pentomino program, with just a few recent modifications that I made after unearthing it. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
 
 ## Building
 
-The pentomino program is a Unix/Linux command line program. You need a C compiler (```gcc```), the standard C library and header files and the ```make``` utility to build it:
+The ```pentomino``` program is a Unix/Linux command-line program. You need a C compiler like ```gcc```, the standard C library and header files, and the ```make``` utility to build it:
 
 ```
 $ make
@@ -43,7 +43,7 @@ The mandatory _inifile_ parameter is the name of a file with the definitions of 
 | **-s** _tryfile_ | Read _tryfile_ and solve it (see ```Stuff/*.try```) |
 | **-v** | Be more verbose |
 
-The following command finds and prints all solutions in color:
+The following command finds all solutions and writes them to the terminal in color:
 
 ```
 $ ./pentomino -cv pentomino.ini
