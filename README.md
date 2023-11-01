@@ -14,7 +14,7 @@ So, how many different solutions do you think there are?
 
 This repository has the old source code for the pentomino program, with just a few recent modifications that I made after unearthing it. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
 
-## Building
+## Building and running the program
 
 The ```pentomino``` program is a Unix/Linux command-line program. You need a C compiler like ```gcc```, the standard C library and header files, and the ```make``` utility to build it:
 
