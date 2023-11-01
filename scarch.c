@@ -76,7 +76,6 @@ void spawn_processes (struct tnode *start_piece)
 
    /* some initialisations */
 
-   prctl.nproc = 0;
    prctl.pid = getpid ();       /* parent's process id */
 
    key = ftok (prg.progname, 'A'); /* key for interprocess communication */
@@ -181,7 +180,6 @@ void spawn_processes (struct tnode *start_piece)
 
       case 0:       /* child process */
 
-         prctl.nproc = nproc+1;
          prctl.pid = getpid ();
          
          start_piece->pos      = gme.before_my_first_pos;
