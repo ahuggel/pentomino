@@ -139,15 +139,15 @@ extern PF1 p_turn_fct[];      /* Functions to rotate a position  */
 
 /* macros */
 
-/***************************************/
-/* get the next position for the piece */
-/***************************************/
+/**************************************************/
+/* set and return the next position for the piece */
+/**************************************************/
 
 /* Arguments   : struct tnode *        */
 /* Return value: struct pnode *        */
 
-#define t_get_pos(piece) (((piece)->pos==NULL) ? ((piece)->pos=(piece)->pos_list) \
-                                               : ((piece)->pos=(piece)->pos->next) )
+#define t_next_pos(piece) (((piece)->pos==NULL) ? ((piece)->pos=(piece)->pos_list) \
+                                                : ((piece)->pos=(piece)->pos->next) )
 
 
 

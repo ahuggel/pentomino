@@ -75,7 +75,7 @@ struct tnode *setup_gameboard(void)
 
 
 /********************************************************/
-/* check all orderings of the pieces on the field       */ 
+/* check all combinations of the pieces on the board    */ 
 /* starting with start_piece and the (preset) gameboard */
 /********************************************************/
 
@@ -104,7 +104,7 @@ void go(struct tnode *piece)
       /* This is a solution */
 
       display_it();
-      
+
    }
    else
    {
@@ -118,10 +118,10 @@ void go(struct tnode *piece)
 }
 
 
-/**************************************************************/
-/* return the next position of a piece which fits in the_game */
-/* and seems to make sense                                    */
-/**************************************************************/
+/***********************************************************/
+/* find the next position of a piece, which fits and seems */
+/* to make sense, set it at the piece and return it        */
+/***********************************************************/
 
 struct pnode *find_pos(struct tnode *piece)
 {
@@ -129,7 +129,7 @@ struct pnode *find_pos(struct tnode *piece)
 
    do
    {
-      while ( (pos = t_get_pos(piece)) && !f_fits(the_game, pos) );
+      while ( (pos = t_next_pos(piece)) && !f_fits(the_game, pos) );
    }
    while ( pos && !gme.f_plausible_fct(the_game, pos) );
    

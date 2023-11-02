@@ -103,7 +103,8 @@ void display_it(void)
    }
    if (*all_counter >= MAX_SOLUTIONS)
    {
-      fprintf (stdout, "pid %d: %d\n", (int) prctl.pid, counter);
+      fprintf (stdout, "pid %d: total %d, this process %d\n",
+               (int) prctl.pid, *all_counter, counter);
       exit (0);
    }
    

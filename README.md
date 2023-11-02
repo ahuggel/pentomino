@@ -6,9 +6,9 @@ How many different solutions does this puzzle have?
 
 This little puzzle resurfaced one day during the pandemic when we couldn't go anywhere and were looking for board games to play. I call it Pentomino and have had it for a very long time. It has always fascinated me because it is so difficult, yet whenever you finally find a solution, it seems to be a new one. Thus the question.
 
-A long time ago, in 1995, I decided to write a C-program to find the answer, and after cracking my head over this challenge for quite a while, my pentomino program eventually printed out every possible solution.
+A long time ago, in 1995, I decided to write a C-program to find the answer, and after cracking my head for quite a while, my pentomino program eventually printed out every possible solution.
 
-Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop, it needs less than 2 seconds!
+Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop (with a Ryzen 7 CPU), it needs only about 0.5 seconds! (With the terminal output turned off.)
 
 So, how many different solutions do you think there are?
 
@@ -49,6 +49,60 @@ The following command finds all solutions and writes them to the terminal in col
 $ ./pentomino -cv pentomino.ini
 ```
 ![image](https://raw.githubusercontent.com/ahuggel/pentomino/main/Stuff/solutions.png)
+
+## Algorithm and design
+
+The program uses a slightly optimized (see below) brute-force approach, which is implemented as a straighforward recursive algorithm, to find all solutions. It consists of a game board (field) and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list.
+
+```c
+/********************************************************/
+/* check all combinations of the pieces on the board    */ 
+/* starting with start_piece and the (preset) gameboard */
+/********************************************************/
+void search_tree(struct tnode *start_piece)
+{
+   while (start_piece->last_pos != find_pos(start_piece))
+   {
+      go(start_piece);
+   }
+}
+
+/***********************************************************/
+/* go does the trial and error job recursively. The number */
+/* of branches at each node depends on the field, find_pos */
+/* gets them all.                                          */
+/***********************************************************/
+void go(struct tnode *piece)
+{
+   f_set(&the_game, piece->pos);
+   
+   if (piece->next == NULL)
+   {
+      /* This is a solution */
+      display_it();
+   }
+   else
+   {
+      while (find_pos(piece->next))
+      {
+         go(piece->next);
+      }
+   }
+   
+   f_rm(&the_game, piece->pos);
+}
+```
+
+## Optimizations
+
+- The list of pieces is sorted by the number of positions a piece can be placed on the board.
+- The positions of the first piece, the cross, are limited to positions in the upper left quadrant of the 10x6 gameboard to eliminate mirrored and rotated solutions.
+- A plausibility check to determine if a gameboard still makes sense after adding a piece. It simply checks if the size of any not yet occupied contiguous region on the gameboard is a multiple of five basic squares. I'm actually not sure if that really makes a difference.
+- The program can split the workload and spawn multiple processes that work in parallel.
+
+## Limitations
+
+The program only works for the standard 10x6 game board size. Support for different game board sizes, holes in the board and different board shapes could be added relatively easily. Support for pieces of different sizes exists but has never really been tested.
 
 ## License
 
