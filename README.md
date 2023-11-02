@@ -6,9 +6,9 @@ How many different solutions does this puzzle have?
 
 This little puzzle resurfaced one day during the pandemic when we couldn't go anywhere and were looking for board games to play. I call it Pentomino and have had it for a very long time. It has always fascinated me because it is so difficult, yet whenever you finally find a solution, it seems to be a new one. Thus the question.
 
-A long time ago, in 1995, I decided to write a C-program to find the answer, and after cracking my head for quite a while, my pentomino program eventually printed out every possible solution.
+A long time ago, in 1995, I decided to write a C-program to find the answer, and after cracking my head for quite a while, this pentomino program eventually printed out every possible solution.
 
-Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop (with a Ryzen 7 CPU), it needs only about 0.5 seconds! (With the terminal output turned off.)
+Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop, it needs only about 0.5 seconds! (Thinkpad E14 with an AMD Ryzen 7, terminal output turned off)
 
 So, how many different solutions do you think there are?
 
