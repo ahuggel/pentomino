@@ -52,7 +52,7 @@ $ ./pentomino -cv pentomino.ini
 
 ## Algorithm and design
 
-The program uses a slightly optimized (see below) brute-force approach, which is implemented as a straighforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list.
+The program uses a somewhat optimized (see below) brute-force approach, which is implemented as a straighforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. Positions and the game board are implemented as arrays of 6 integers each, and individual bits in these integer arrays are set to occupy basic squares. The go() function is called 1,277,173 times while the program finds all solutions.
 
 ```c
 /********************************************************/
@@ -95,14 +95,14 @@ void go(struct tnode *piece)
 
 ## Optimizations
 
-- The list of pieces is sorted by the number of positions a piece can be placed on the board.
+- The list of pieces is sorted by the number of positions a piece can be placed on the board. The idea is to use the hardest to place pieces first. 
 - The positions of the first piece, the cross, are limited to positions in the upper left quadrant of the 10x6 game board to eliminate mirrored and rotated solutions.
-- A plausibility check to determine if a game board still makes sense after adding a piece. It simply checks if the size of any not yet occupied contiguous region on the game board is a multiple of five basic squares.
-- The program can split the workload and spawn multiple processes that work in parallel.
+- A plausibility check to determine if a game board still makes sense after adding a piece. It simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares.
+- The program can split the workload and start multiple processes that work in parallel.
 
 ## Limitations
 
-The program only works for the standard 10x6 board size. Support for different game board sizes, even holes in the board and different board shapes could be added relatively easily. Support for pieces of different sizes exists but has never really been tested.
+The pentomino program only works for the standard 10x6 board size. Support for different game board sizes, even holes in the board and different board shapes could be added relatively easily. Support for pieces of different sizes exists but has never really been tested.
 
 ## License
 
