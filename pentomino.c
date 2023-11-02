@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
    gme.f_plausible_fct     = NULL;
    gme.piece_count         = 0;
    gme.piece_sizes         = -1;
+   gme.counter             = 0;
    
    /* handle the command line arguments */
    
@@ -179,8 +180,13 @@ int main(int argc, char *argv[])
    spawn_processes(start_piece);
 #else
    search_tree(start_piece);              /* trial and error... */
+   fprintf (stdout, "%d solutions found\n", gme.counter);
 #endif
-   
+   if (prg.verbose)
+   {
+      prt_time (stdout);
+   }
+
    return 0;
 }
 

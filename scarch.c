@@ -224,6 +224,8 @@ void spawn_processes (struct tnode *start_piece)
    
    while (wait (NULL) >= 0);
 
+   fprintf (stdout, "%d solutions found\n", *(cntT *) prctl.shmaddr);
+
    cleanup (0);
 
 }

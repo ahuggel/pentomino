@@ -65,15 +65,13 @@ char* colors[] = {
 void display_it(void)
 #ifdef TIME_ONLY
 {
-   static int  counter=0;
-
 #ifdef SCARCH
    cntT *all_counter;
    
    all_counter = (cntT *)prctl.shmaddr;
 #endif /* SCARCH */
    
-   counter++; /* increase the per process counter */
+   gme.counter++; /* increase the per process counter */
 
 #ifdef SCARCH   
 
@@ -95,29 +93,14 @@ void display_it(void)
    if ((*all_counter % INTERVAL) == 0)
    {      
       fprintf (stdout, "pid %d: total %d, this process %d\n",
-               (int) prctl.pid, *all_counter, counter);
-   }
-   if (*all_counter == MAX_SOLUTIONS)
-   {
-      prt_time (stderr);      
-   }
-   if (*all_counter >= MAX_SOLUTIONS)
-   {
-      fprintf (stdout, "pid %d: total %d, this process %d\n",
-               (int) prctl.pid, *all_counter, counter);
-      exit (0);
+               (int) prctl.pid, *all_counter, gme.counter);
    }
    
 #else /* ! SCARCH */     
 
-   if ((counter % INTERVAL) == 0)
+   if ((gme.counter % INTERVAL) == 0)
    {      
-      fprintf (stdout, "%d\n", counter);
-   }
-   if (counter == MAX_SOLUTIONS)
-   {
-      prt_time (stdout);       
-      exit (0);
+      fprintf (stdout, "%d\n", gme.counter);
    }
 
 #endif /* ! SCARCH */
@@ -133,7 +116,6 @@ void display_it(void)
    struct tnode *piece;
    struct pnode *pos;
    int i,j;
-   static int  counter=0;
 
 #ifdef SCARCH   
    cntT *all_counter;
@@ -141,7 +123,7 @@ void display_it(void)
    all_counter = (cntT *)prctl.shmaddr;
 #endif /* SCARCH */   
    
-   counter++; /* increase the per process counter */
+   gme.counter++; /* increase the per process counter */
 
 #ifdef SCARCH   
 
@@ -188,9 +170,9 @@ void display_it(void)
 
 #ifdef SCARCH
       fprintf (stdout, "%d. Solution (%d. for pid %d):\n",
-               *all_counter, counter, (int) prctl.pid);
+               *all_counter, gme.counter, (int) prctl.pid);
 #else /* ! SCARCH */
-      fprintf (stdout, "%d. Solution:\n", counter);
+      fprintf (stdout, "%d. Solution:\n", gme.counter);
 #endif /* ! SCARCH */
       
       prt_time (stdout);

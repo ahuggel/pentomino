@@ -40,6 +40,7 @@ struct ginfo {
                                       /*  0: piece sizes differ          */
                                       /* >0: size, i.e. ones per piece   */
    PF2          f_plausible_fct;      /* The plausibility check function */
+   unsigned int counter;              /* The number of solutions         */
 };
 
 

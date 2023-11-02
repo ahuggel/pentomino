@@ -39,7 +39,6 @@ typedef int cntT;
 /* process control data structure */
 struct pcntl
 {
-   int           nproc;   /* process number (0: parent)           */
    pid_t         pid;     /* process identifier                   */
    int           semid;   /* semaphore identifier                 */
    int           shmid;   /* shared memory region identifier      */

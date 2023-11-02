@@ -28,7 +28,6 @@
 #define PRINT_H
 
 #define INTERVAL       500
-#define MAX_SOLUTIONS  2339
 
 #define FIELD_SET      '1'
 #define FIELD_NOT_SET  '0'

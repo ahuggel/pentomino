@@ -72,7 +72,7 @@ struct pinfo {
    int  sort;
 #ifdef SCARCH
    int  scale;
-#endif   
+#endif
 };
 
 
