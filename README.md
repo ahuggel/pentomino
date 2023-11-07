@@ -40,6 +40,7 @@ The mandatory _inifile_ parameter is the name of a file with the definitions of 
 | **-c** | Print colored output instead of letters |
 | **-n** | Don't sort the pieces (experimental) |
 | **-p** _scale_ | Spawn _scale_ processes |
+| **-q** | Be more quiet |
 | **-s** _tryfile_ | Read _tryfile_ and solve it (see ```Stuff/*.try```) |
 | **-v** | Be more verbose |
 

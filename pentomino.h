@@ -51,15 +51,16 @@
 /* Command line argument string for getopt */
 /* c        : print colored output         */
 /* n        : nosort                       */
+/* q        : quiet                        */
 /* s tryfile: read tryfile and solve it    */
 /* p scale  : spawn scale processes        */
 /* v        : verbose                      */
 #ifdef SCARCH
-#define ARGS      ":cnp:s:v"
-#define USAGE_STR "Usage: %s [-cv] [-n|-s tryfile] [-p scale] inifile\n"
+#define ARGS      ":cnp:qs:v"
+#define USAGE_STR "Usage: %s [-cqv] [-n|-s tryfile] [-p scale] inifile\n"
 #else
-#define ARGS      ":cns:v"
-#define USAGE_STR "Usage: %s [-cv] [-n|-s tryfile] inifile\n"
+#define ARGS      ":cnqs:v"
+#define USAGE_STR "Usage: %s [-cqv] [-n|-s tryfile] inifile\n"
 #endif
 
 /* Global program info */
@@ -68,6 +69,7 @@ struct pinfo {
    char *inifile;  
    char *tryfile;  
    int  color;
+   int  quiet;
    int  verbose;
    int  sort;
 #ifdef SCARCH

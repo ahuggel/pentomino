@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
    prg.inifile  = NULL;
    prg.tryfile  = NULL;
    prg.color    = FALSE;
+   prg.quiet    = FALSE;
    prg.verbose  = FALSE;
    prg.sort     = TRUE;
 #ifdef SCARCH
@@ -88,6 +89,9 @@ int main(int argc, char *argv[])
          prg.scale = abs (atoi (optarg));
          break;
 #endif
+      case 'q':
+         prg.quiet = TRUE;
+         break;
       case 's':
          prg.tryfile = optarg;
          break;

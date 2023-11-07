@@ -63,52 +63,6 @@ char* colors[] = {
 
 /* this is just a first and very quick try */
 void display_it(void)
-#ifdef TIME_ONLY
-{
-#ifdef SCARCH
-   cntT *all_counter;
-   
-   all_counter = (cntT *)prctl.shmaddr;
-#endif /* SCARCH */
-   
-   gme.counter++; /* increase the per process counter */
-
-#ifdef SCARCH   
-
-   P (prctl.semid);
-
-#ifdef DEBUG
-   fprintf (stdout, "pid %d: Semaphore acquired\n", (int) prctl.pid);
-   fprintf (stdout, "all_counter before inc: %d\n", *all_counter);   
-#endif /* DEBUG */
-
-   (*all_counter)++; /* increase the global counter, too */
-
-#ifdef DEBUG
-   fprintf (stdout, "pid %d: Semaphore released\n", (int) prctl.pid);
-#endif /* DEBUG */
-
-   V (prctl.semid);
-
-   if ((*all_counter % INTERVAL) == 0)
-   {      
-      fprintf (stdout, "pid %d: total %d, this process %d\n",
-               (int) prctl.pid, *all_counter, gme.counter);
-   }
-   
-#else /* ! SCARCH */     
-
-   if ((gme.counter % INTERVAL) == 0)
-   {      
-      fprintf (stdout, "%d\n", gme.counter);
-   }
-
-#endif /* ! SCARCH */
-
-}
-
-#else /* ! TIME_ONLY */
-
 {
    brickT *disp;
    char brick='a';
@@ -117,96 +71,83 @@ void display_it(void)
    struct pnode *pos;
    int i,j;
 
-#ifdef SCARCH   
+#ifdef SCARCH
    cntT *all_counter;
-   
    all_counter = (cntT *)prctl.shmaddr;
-#endif /* SCARCH */   
-   
+   P (prctl.semid);
+   (*all_counter)++; /* increase the global counter */
+#endif /* SCARCH */
+
    gme.counter++; /* increase the per process counter */
 
-#ifdef SCARCH   
-
-   P (prctl.semid);
-
-#ifdef DEBUG
-   fprintf (stdout, "pid %d: Semaphore acquired\n", (int) prctl.pid);
-   fprintf (stdout, "all_counter before inc: %d\n", *all_counter);   
-#endif /* DEBUG */
-
-   (*all_counter)++; /* increase the global counter, too */
-
-#endif /* SCARCH */
-   
-   /* now print the solution as a brick field */
-
-   disp = b_alloc();
-
-   /* fill the array with all pieces */
-   
-   for (piece=gme.first_piece; piece != NULL; piece=piece->next)
+   if (!prg.quiet)
    {
-      pos = piece->pos;
-      
-      if (pos != NULL)
+      /* now print the solution as a brick field */
+
+      disp = b_alloc();
+
+      /* fill the array with all pieces */
+   
+      for (piece=gme.first_piece; piece != NULL; piece=piece->next)
       {
-         for (i=0; i<YDIM; i++)
-         {     
-            for (j=0; j<XDIM; j++)
-            {
-               if (f_testxy (pos->field, j, i))
+         pos = piece->pos;
+      
+         if (pos != NULL)
+         {
+            for (i=0; i<YDIM; i++)
+            {     
+               for (j=0; j<XDIM; j++)
                {
-                  b_setxy (disp, j, i, brick);
+                  if (f_testxy (pos->field, j, i))
+                  {
+                     b_setxy (disp, j, i, brick);
+                  }
                }
             }
+            brick++;
          }
-         brick++;
       }
-   }
 
-   if (prg.verbose)
-   {
-      /* print general info */
+      if (prg.verbose)
+      {
+         /* print general info */
 
 #ifdef SCARCH
-      fprintf (stdout, "%d. Solution (%d. for pid %d):\n",
-               *all_counter, gme.counter, (int) prctl.pid);
+         fprintf (stdout, "%d. Solution (%d. for pid %d):\n",
+                  *all_counter, gme.counter, (int) prctl.pid);
 #else /* ! SCARCH */
-      fprintf (stdout, "%d. Solution:\n", gme.counter);
+         fprintf (stdout, "%d. Solution:\n", gme.counter);
 #endif /* ! SCARCH */
       
-      prt_time (stdout);
-      fprintf (stdout, "\n");
+         prt_time (stdout);
+         fprintf (stdout, "\n");
 
-      /* print the brick field */
+         /* print the brick field */
 
-      print_bfield (*disp);
-      fprintf (stdout, "\n\n");
-   }
-   else
-   {
-      /* print only a simple brick field */
+         print_bfield (*disp);
+         fprintf (stdout, "\n\n");
+      }
+      else
+      {
+         /* print only a simple brick field */
       
-      print_bfield (*disp);
-      fprintf (stdout, "\n");
-   }
+         print_bfield (*disp);
+         fprintf (stdout, "\n");
+      }
 
-   b_free (disp);
+      b_free (disp);
+   }
 
 #ifdef SCARCH
-   
-#ifdef DEBUG
-   fprintf (stdout, "pid %d: Semaphore released\n", (int) prctl.pid);
-#endif /* DEBUG */
-
-   fflush(stdout);
+   if (!prg.quiet)
+   {
+      fflush(stdout);
+   }
    V (prctl.semid);
-
 #endif /* SCARCH */
 
 }
 
-#endif /* ! TIME_ONLY */
 
 /****************************/
 /* print the list of pieces */
