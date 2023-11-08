@@ -159,8 +159,6 @@ int f_plausible1(struct fieldT field, struct pnode *pos)
       }
    }
    
-   f_rm(&test_field, pos);
-   
    return ok;
 }
 

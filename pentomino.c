@@ -70,6 +70,15 @@ int main(int argc, char *argv[])
    gme.piece_sizes         = -1;
    gme.counter             = 0;
    
+   /* make sure the data type used for a board is large enough */
+
+   if (sizeof(lineT)*8 < XDIM*YDIM)
+   {
+      fprintf(stderr, "%s: The data type used for a board is too small (lineT is %ld bytes)\n",
+              prg.progname, sizeof(lineT));
+      exit(1);
+   }
+
    /* handle the command line arguments */
    
    optarg = NULL;

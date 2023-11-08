@@ -8,11 +8,11 @@ This little puzzle resurfaced one day during the pandemic when we couldn't go an
 
 A long time ago, in 1995, I decided to write a C-program to find the answer, and after cracking my head for quite a while, this pentomino program eventually printed out every possible solution.
 
-Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop, it needs only about 0.5 seconds! (Thinkpad E14 with an AMD Ryzen 7, terminal output turned off)
+Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop, it needs only about 0.3 seconds! (Thinkpad E14 with an AMD Ryzen 7, quiet mode)
 
 So, how many different solutions do you think there are?
 
-This repository has the old source code for the pentomino program, with just a few recent modifications that I made after unearthing it. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
+This repository has the old source code for the pentomino program, with some recent modifications that I made after unearthing it. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
 
 ## Building and running the program
 
@@ -53,7 +53,7 @@ $ ./pentomino -cv pentomino.ini
 
 ## Algorithm and design
 
-The program uses a somewhat optimized (see below) brute-force approach, which is implemented as a straighforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. Positions and the game board are implemented as arrays of 6 integers each, and individual bits in these integer arrays are set to occupy basic squares. The go() function is called 1,277,173 times while the program finds all solutions.
+The program uses a somewhat optimized (see below) trial-and-error approach, which is implemented as a straighforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. Each position and the game board are implemented as just an eight byte unsigned integer, and individual bits are set to mark basic squares as occupied. The go() function is called 1,277,173 times while the program finds all solutions.
 
 ```c
 /********************************************************/
@@ -98,7 +98,7 @@ void go(struct tnode *piece)
 
 - The list of pieces is sorted by the number of positions a piece can be placed on the board. The idea is to use the hardest to place pieces first. 
 - The positions of the first piece, the cross, are limited to positions in the upper left quadrant of the 10x6 game board to eliminate mirrored and rotated solutions.
-- A plausibility check to determine if a game board still makes sense after adding a piece. It simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares.
+- A plausibility check to determine if a game board still makes sense after adding a piece; it simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares.
 - The program can split the workload and start multiple processes that work in parallel.
 
 ## Limitations

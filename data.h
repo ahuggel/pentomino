@@ -32,13 +32,12 @@
 #define YDIM        6
 
 /* Eine Spielfeld Zeile */
-typedef unsigned long lineT;
+typedef unsigned long long lineT;
 
 /* Ein Spielfeld */
 struct fieldT {
-   lineT line[YDIM];
+   lineT line;
 };
-
 /* brick field type: a character array */
 typedef char brickT[YDIM][XDIM+1];
 
@@ -105,8 +104,6 @@ extern struct pnode *p_turn_270   (struct pnode *);
 extern struct pnode *p_mirror_x   (struct pnode *);
                                   
 
-extern int           f_cmp        (struct fieldT, struct fieldT);
-                                  
 extern void          f_copy       (struct fieldT *, struct fieldT);
                                   
 extern void          f_clear      (struct fieldT *);
@@ -115,9 +112,11 @@ extern void          f_set        (struct fieldT *, struct pnode *);
                                   
 extern void          f_rm         (struct fieldT *, struct pnode *);
                                   
-extern int           f_fits       (struct fieldT, struct pnode *);
-                                  
 extern int           f_fill       (struct fieldT *, int, int);
+
+extern lineT         f_get_line   (struct fieldT, int);
+
+extern void          f_set_line   (struct fieldT *, int, lineT);
 
 
 extern brickT       *b_alloc      (void);
@@ -139,6 +138,28 @@ extern PF1 p_turn_fct[];      /* Functions to rotate a position  */
 
 /* macros */
 
+/*****************************************************/
+/* compare two fields, return TRUE if they are equal */ 
+/*****************************************************/
+
+/* Arguments   : struct fieldT field1, field2        */
+/* Return value: int                                 */
+
+#define f_cmp(field1, field2) ((field1).line == (field2).line)
+
+
+/**************************************************/
+/* check if position piece->pos fits in the field */
+/**************************************************/
+
+/* Arguments   : struct fieldT board              */
+/*               struct pnode *pos                */
+/* Return value: int                              */
+
+
+#define f_fits(board, pos) ((pos) != NULL && !((board).line & (pos)->field.line))
+
+
 /**************************************************/
 /* set and return the next position for the piece */
 /**************************************************/
@@ -150,7 +171,6 @@ extern PF1 p_turn_fct[];      /* Functions to rotate a position  */
                                                 : ((piece)->pos=(piece)->pos->next) )
 
 
-
 /***********************************************************/
 /* test position xy in a field (upper left corner is (0,0) */
 /***********************************************************/
@@ -158,8 +178,7 @@ extern PF1 p_turn_fct[];      /* Functions to rotate a position  */
 /* Arguments   : struct fieldT field, int x, int y         */
 /* Return value: int                                       */
 
-#define f_testxy(field, x, y)  (((field).line[(y)] >> (XDIM-1-(x))) & 1)
-
+#define f_testxy(field, x, y)  (((field).line >> ((XDIM)*(y)+(x))) & 1)
 
 
 /**********************************************************/
@@ -169,6 +188,6 @@ extern PF1 p_turn_fct[];      /* Functions to rotate a position  */
 /* Arguments   : struct fieldT *field, int x, int y       */
 /* Return value: void                                     */
 
-#define f_setxy(field, x, y)  ((field)->line[(y)] |= (1 << (XDIM-1-(x))))
+#define f_setxy(field, x, y)  ((field)->line |= ((lineT)1 << ((XDIM)*(y)+(x))))
 
 #endif /* ! DATA_H */

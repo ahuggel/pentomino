@@ -218,17 +218,11 @@ void p_flush(struct pnode **pos_list)
 int p_up(struct pnode *pos)
 {
    int ok=NOTOK;
-   int i;
-   
-   if (pos->field.line[0] == 0)
+
+   if (f_get_line(pos->field, 0) == 0)
    {
       ok = OK;
-
-      for (i=0; i<YDIM-1; i++)
-      {
-         pos->field.line[i] = pos->field.line[i+1];
-      }
-      pos->field.line[YDIM-1] = 0;
+      pos->field.line = pos->field.line >> XDIM;
    }
    return ok;
 }
@@ -254,10 +248,7 @@ int p_left(struct pnode *pos)
    }
    if (ok)
    {
-      for (i=0; i<YDIM; i++)
-      {
-         pos->field.line[i] <<= 1;
-      }
+      pos->field.line >>= 1;
    }
    return ok;
 }
@@ -271,16 +262,12 @@ int p_left(struct pnode *pos)
 struct pnode *p_down(struct pnode *pos)
 {
    struct pnode *new_pos = NULL;
-   int i;
 
-   if (pos->field.line[YDIM-1] == 0)
+   if (f_get_line(pos->field, YDIM-1) == 0)
    {
       new_pos = p_alloc(); /* field is empty */
       
-      for (i=YDIM-1; i>0; i--)
-      {
-         new_pos->field.line[i] = pos->field.line[i-1];
-      }
+      new_pos->field.line = pos->field.line << XDIM;
    }
    return new_pos;
 }
@@ -308,11 +295,8 @@ struct pnode *p_right(struct pnode *pos)
    if (ok)
    {
       new_pos = p_alloc();
-      
-      for (i=0; i<YDIM; i++)
-      {
-         new_pos->field.line[i] = (pos->field.line[i] >> 1);
-      }
+
+      new_pos->field.line = (pos->field.line << 1);
    }
    return new_pos;
 }
@@ -348,9 +332,9 @@ struct pnode *p_identity(struct pnode *pos)
 
 
 
-/***********************************************************************/
-/* create a new pos. by rotating the current by 90 degrees (clockwise) */
-/***********************************************************************/
+/****************************************************************************/
+/* create a new pos. by rotating the current by 90 degrees (anti-clockwise) */
+/****************************************************************************/
    
 struct pnode *p_turn_90(struct pnode *pos)
 {
@@ -363,10 +347,10 @@ struct pnode *p_turn_90(struct pnode *pos)
 /* check dimensions of the position */
    if (XDIM > YDIM)
    {
-      mask = ~(~0 << (XDIM-YDIM));
+      mask = ~(~0 << (XDIM-YDIM)) << YDIM;
       for (i=0; i<YDIM; i++)
       {
-         if (pos->field.line[i] & mask)
+         if (f_get_line(pos->field, i) & mask)
          {
             ok = NOTOK;
             break;
@@ -377,7 +361,7 @@ struct pnode *p_turn_90(struct pnode *pos)
    {
       for (i=XDIM; i<YDIM; i++)
       {
-         if (pos->field.line[i])
+         if (f_get_line(pos->field, i))
          {
             ok = NOTOK;
             break;
@@ -465,7 +449,7 @@ struct pnode *p_mirror_x(struct pnode *pos)
 
    for (i=0; i<YDIM; i++)
    {
-      new_pos->field.line[YDIM-1-i] = pos->field.line[i];
+      f_set_line(&new_pos->field, YDIM-1-i, f_get_line(pos->field, i));
    }
    p_shift_lu(new_pos);
    
@@ -481,21 +465,6 @@ struct pnode *p_mirror_x(struct pnode *pos)
 PF1 p_mirror_fct[] = { p_identity, p_mirror_x, NULL };
 
 PF1 p_turn_fct[]   = { p_identity, p_turn_90, p_turn_180, p_turn_270, NULL };
-
-
-
-/*****************************************************/
-/* compare two fields, return TRUE if they are equal */ 
-/*****************************************************/
-
-int f_cmp(struct fieldT field1, struct fieldT field2)
-{
-   int i;
-   
-   for(i=0; i<YDIM && field1.line[i] == field2.line[i]; i++);
-
-   return i == YDIM;
-}
 
 
 
@@ -525,14 +494,9 @@ void f_clear(struct fieldT *field)
 
 void f_set(struct fieldT *field, struct pnode *pos)
 {
-   int i;
-   
    if (pos != NULL)
    {
-      for (i=0; i<YDIM; i++)
-      {
-         field->line[i] |= pos->field.line[i];
-      }
+      field->line |= pos->field.line;
    }
 }
 
@@ -543,32 +507,10 @@ void f_set(struct fieldT *field, struct pnode *pos)
 
 void f_rm(struct fieldT *field, struct pnode *pos)
 {
-   int i;
-   
    if (pos != NULL)
    {
-      for (i=0; i<YDIM; i++)
-      {
-         field->line[i] &= ~pos->field.line[i];
-      }
+      field->line &= ~pos->field.line;
    }
-}
-
-
-/**************************************************/
-/* check if position piece->pos fits in the field */
-/**************************************************/
-
-int f_fits(struct fieldT field, struct pnode *pos)
-{
-   register int i=0;
-
-   if (pos != NULL)
-   {
-      for (i=0; i<YDIM && !(field.line[i] & pos->field.line[i]); i++);
-   }
-   
-   return i == YDIM;
 }
 
 
@@ -604,6 +546,26 @@ int f_fill(struct fieldT *field, int x, int y)
    }
 
    return n;
+}
+
+
+/********************************************************************/
+/* get line y from the field (see getbits() in the C book :)        */
+/********************************************************************/
+
+lineT f_get_line(struct fieldT field, int y)
+{
+   return (field.line >> (XDIM*y)) & ~(~0 << XDIM);
+}
+
+
+/********************************************************************/
+/* set line y in field to line                                      */
+/********************************************************************/
+
+void f_set_line(struct fieldT *field, int y, lineT line)
+{
+   field->line |= line << (XDIM*y);
 }
 
 

@@ -13,7 +13,7 @@
 
 # GNU C
 CC = gcc
-#CFLAGS = -g 
+#CFLAGS = -g -DDEBUG
 
 # optimize
 CFLAGS += -O3 
