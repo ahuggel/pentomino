@@ -92,6 +92,23 @@ void go(struct tnode *piece)
    
    f_rm(&the_game, piece->pos);
 }
+
+/***********************************************************/
+/* find the next position of a piece, which fits and seems */
+/* to make sense, set it at the piece and return it        */
+/***********************************************************/
+struct pnode *find_pos(struct tnode *piece)
+{
+   struct pnode *pos;
+
+   do
+   {
+      while ((pos = t_next_pos(piece)) && !f_fits(the_game, pos));
+   }
+   while (pos && !gme.f_plausible_fct(the_game, pos));
+   
+   return pos;
+}
 ```
 
 ## Optimizations
