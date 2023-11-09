@@ -126,14 +126,13 @@ void spawn_processes (struct tnode *start_piece)
    /* (we know that start_piece->pos == NULL)         */
 
    cnt = 0;
-   
    while (NULL != (pos = find_pos (start_piece)))
    {
       cnt++;
    }
-   
+
    scale = min (cnt, prg.scale);
-      
+
    /* start all processes (pos is NULL) */
 
    my_last_pos = pos;
