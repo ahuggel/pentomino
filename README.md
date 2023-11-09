@@ -12,7 +12,7 @@ Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on
 
 So, how many different solutions do you think there are?
 
-This repository has the old source code for the pentomino program, with some recent modifications that I made after unearthing it. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
+This repository has the old source code for the pentomino program, with some recent modifications made after unearthing it, most notably the change to using just one eight byte unsigned integer for a board and the colorful terminal output. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
 
 ## Building and running the program
 
@@ -53,7 +53,7 @@ $ ./pentomino -cv pentomino.ini
 
 ## Algorithm and design
 
-The program uses a somewhat optimized (see below) trial-and-error approach, which is implemented as a straighforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. Each position and the game board are implemented as just an eight byte unsigned integer, and individual bits are set to mark basic squares as occupied. The go() function is called 1,277,173 times while the program finds all solutions.
+The program uses a somewhat optimized (see below) trial-and-error approach, which is implemented as a straighforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. A game board requires just one eight byte unsigned integer, and individual bits are set to mark basic squares as occupied. The go() function is called 1,277,173 times while the program finds all solutions.
 
 ```c
 /********************************************************/
