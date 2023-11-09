@@ -263,6 +263,9 @@ void restrict_pos_lists(void)
    {
       free_it = FALSE;
       
+      if (!gme.f_plausible_fct((*pos)->field, *pos)) {
+         free_it = TRUE;
+      }
       for (i=4; i<YDIM && !free_it; i++)
       {     
          for (j=0; j<XDIM && !free_it; j++)
@@ -287,6 +290,7 @@ void restrict_pos_lists(void)
       if (free_it)
       {
          p_free(pos);
+         piece->pos_count -= 1; /* this should be t_rm_pos() or t_free_pos() */
       }
       else
       {
