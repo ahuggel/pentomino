@@ -431,7 +431,14 @@ struct pnode *p_turn_180(struct pnode *pos)
    
 struct pnode *p_turn_270(struct pnode *pos)
 {
-   return p_turn_90(p_turn_180(pos));
+   struct pnode *tmp_pos=NULL;
+   struct pnode *new_pos=NULL;
+
+   tmp_pos = p_turn_180(pos);
+   new_pos = p_turn_90(tmp_pos);
+   p_free(&tmp_pos);
+
+   return new_pos;
 }
 
 
