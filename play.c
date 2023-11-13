@@ -151,9 +151,11 @@ int f_plausible1(struct fieldT field, struct pnode *pos)
 
    f_set(&test_field, pos);
 
-   for (i=0; i<YDIM && ok; i++)
+   /* Doing this from the opposite end and skipping every other     */
+   /* x-position(!) improves the overall performance by about 20%   */
+   for (i=YDIM-1; i>=0 && ok; i-=1)
    {     
-      for (j=0; j<XDIM && ok; j++)
+      for (j=XDIM-2; j>=0 && ok; j-=2)
       {
          ok = (f_fill(&test_field, j, i) % gme.piece_sizes == 0);
       }
