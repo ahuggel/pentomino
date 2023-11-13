@@ -13,7 +13,7 @@
 
 # GNU C
 CC = gcc
-#CFLAGS = -g -DDEBUG
+#CFLAGS += -g
 
 # optimize
 CFLAGS += -O3 
@@ -39,7 +39,7 @@ CFLAGS += -Wall
 #CFLAGS = -O3
 
 # produce call graph profile data
-#CFLAGS = -pg
+#CFLAGS += -pg
 #LDFLAGS = -pg
 
 #----------------------------------------------------
@@ -47,9 +47,6 @@ CFLAGS += -Wall
 
 # for scalable architecture support define SCARCH
 CFLAGS += -DSCARCH
-
-# for performance measurements define TIME_ONLY
-#CFLAGS += -DTIME_ONLY
 
 # for a lot of debug output define DEBUG 
 #CFLAGS += -DDEBUG
@@ -85,5 +82,6 @@ play.o:      setup.h play.h print.h $(HEADS)
 
 scarch.o:    play.h scarch.h ${HEADS}
 
+.PHONY : clean
 clean:
-	$(RM) $(AOUT) *.o *~ .*~
+	-$(RM) $(AOUT) *.o *~ .*~
