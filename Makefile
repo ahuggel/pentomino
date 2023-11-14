@@ -72,15 +72,15 @@ pentomino.o: setup.h read.h print.h play.h $(HEADS)
 
 data.o:      $(HEADS)
 
-setup.o:     setup.h play.h $(HEADS)
+setup.o:     setup.h play.h print.h $(HEADS)
 
 read.o:      setup.h read.h print.h $(HEADS)
 
-print.o:     setup.h print.h $(HEADS)
+print.o:     setup.h print.h scarch.h $(HEADS)
 
 play.o:      setup.h play.h print.h $(HEADS)
 
-scarch.o:    play.h scarch.h ${HEADS}
+scarch.o:    setup.h play.h scarch.h ${HEADS}
 
 .PHONY : clean
 clean:
