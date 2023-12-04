@@ -534,19 +534,19 @@ int f_fill(struct fieldT *field, int x, int y)
       n++;
       f_setxy(field, x, y);
 
-      if (y+1<YDIM && !f_testxy(*field, x, y+1))
+      if (y < (YDIM)-1 && !f_testxy(*field, x, y+1))
       {
          n += f_fill(field, x, y+1);
       }
-      if (x+1<XDIM && !f_testxy(*field, x+1, y))
+      if (x < (XDIM)-1 && !f_testxy(*field, x+1, y))
       {
          n += f_fill(field, x+1, y);
       }
-      if (y-1>=0 && !f_testxy(*field, x, y-1))
+      if (y > 0 && !f_testxy(*field, x, y-1))
       {
          n += f_fill(field, x, y-1);
       }
-      if (x-1>=0 && !f_testxy(*field, x-1, y))
+      if (x > 0 && !f_testxy(*field, x-1, y))
       {
          n += f_fill(field, x-1, y);
       }
