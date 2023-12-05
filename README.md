@@ -53,7 +53,7 @@ $ ./pentomino -cv pentomino.ini
 
 ## Algorithm and design
 
-The program uses a somewhat optimized (see below) trial-and-error approach, which is implemented as a straighforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. A game board requires just one eight byte unsigned integer, and individual bits are set to mark basic squares as occupied. The go() function is called 1,277,173 times while the program finds all solutions.
+The program uses a somewhat optimized (see below) trial-and-error approach, which is implemented as a straightforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. A game board requires just one eight byte unsigned integer, and individual bits are set to mark basic squares as occupied. The go() function is called 1,277,173 times while the program finds all solutions.
 
 ```c
 /********************************************************/
@@ -115,8 +115,43 @@ struct pnode *find_pos(struct tnode *piece)
 
 - The list of pieces is sorted by the number of positions a piece can be placed on the board. The idea is to use the hardest to place pieces first. 
 - The positions of the first piece, the cross, are limited to positions in the upper left quadrant of the 10x6 game board to eliminate mirrored and rotated solutions.
-- A plausibility check to determine if a game board still makes sense after adding a piece; it simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares.
-- The program can split the workload and start multiple processes that work in parallel.
+- The program can split the workload and start multiple processes that work in parallel. The positions of the first piece are distributed to different processes and as the cross has only seven positions, the number of worker processes is limited to seven.
+- A plausibility check to determine if a game board still makes sense after adding a piece; it simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares. A simple recursive fill function is used for this and accounts for more than 56% of the total time spent (gprof) and more than 73% of all instructions executed (cachegrind).
+
+```c
+/****************************************************************/
+/* recursively fill field starting at (x,y) and counting pixels */
+/****************************************************************/
+int f_fill(struct fieldT *field, int x, int y)
+{
+   int n=0;
+
+   if (!f_testxy(*field, x, y))
+   {
+      n++;
+      f_setxy(field, x, y);
+
+      if (y < (YDIM)-1 && !f_testxy(*field, x, y+1))
+      {
+         n += f_fill(field, x, y+1);
+      }
+      if (x < (XDIM)-1 && !f_testxy(*field, x+1, y))
+      {
+         n += f_fill(field, x+1, y);
+      }
+      if (y > 0 && !f_testxy(*field, x, y-1))
+      {
+         n += f_fill(field, x, y-1);
+      }
+      if (x > 0 && !f_testxy(*field, x-1, y))
+      {
+         n += f_fill(field, x-1, y);
+      }
+   }
+
+   return n;
+}
+```
 
 ## Limitations
 
