@@ -10,8 +10,6 @@ A long time ago, in 1995, I decided to write a C-program to find the answer, and
 
 Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop, it needs only about 0.3 seconds! (Thinkpad E14 with an AMD Ryzen 7, quiet mode)
 
-So, how many different solutions do you think there are?
-
 This repository has the old source code for the pentomino program, with some recent modifications made after unearthing it, most notably the change to using just one eight byte unsigned integer for a board and the colorful terminal output. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
 
 ## Building and running the program
@@ -113,10 +111,10 @@ struct pnode *find_pos(struct tnode *piece)
 
 ## Optimizations
 
-- The list of pieces is sorted by the number of positions a piece can be placed on the board. The idea is to use the hardest to place pieces first. 
+- The list of pieces is sorted by the number of positions a piece can be placed on the board. The idea is to use the hardest to place pieces first.
 - The positions of the first piece, the cross, are limited to positions in the upper left quadrant of the 10x6 game board to eliminate mirrored and rotated solutions.
 - The program can split the workload and start multiple processes that work in parallel. It does that by distributing the positions of the first piece to different processes. As the cross has only seven positions in the upper left quadrant of the game board, the number of worker processes is limited to a maximum of seven - not enough to make use of all cores and CPUs of modern computers.
-- A plausibility check to determine if a game board still makes sense after adding a piece; it simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares. A fill function is used for this and accounts for more than 56% of the total time spent (gprof) and more than 73% of all instructions executed (cachegrind).
+- A plausibility check to determine if a game board still makes sense after adding a piece; it simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares. The recursive fill function used for this accounts for more than 56% of the total time spent (gprof) and more than 73% of all instructions executed (cachegrind).
 
 ```c
 /****************************************************************/
