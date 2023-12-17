@@ -8,7 +8,7 @@ This little puzzle resurfaced one day during the pandemic when we couldn't go an
 
 A long time ago, in 1995, I decided to write a C-program to find the answer, and after cracking my head for quite a while, this pentomino program eventually printed out every possible solution.
 
-Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop, it needs only about 0.3 seconds! (Thinkpad E14 with an AMD Ryzen 7, quiet mode)
+Back in 1995, the task took my home PC a solid 25 minutes to complete. Today, on a regular laptop, it needs less than 0.3 seconds! (Thinkpad E14 with an AMD Ryzen 7, quiet mode)
 
 This repository has the old source code for the pentomino program, with some recent modifications made after unearthing it, most notably the change to using just one 8-byte unsigned long integer for a board and the colorful terminal output. It compiles fine in the Windows Subsystem for Linux running Debian on my laptop.
 
@@ -51,7 +51,7 @@ $ ./pentomino -cv pentomino.ini
 
 ## Algorithm and design
 
-The program uses a somewhat optimized (see below) trial-and-error approach, which is implemented as a straightforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. A game board requires just one 8-byte unsigned long integer, and individual bits are set to mark basic squares as occupied. The go() function sets a piece on the board and eventually removes it again. It is called 1.23 million times while the program finds all solutions, which may explain why it can be hard to find a solution manually. If you think that's a big number though, read on.
+The program uses a somewhat optimized (see below) trial-and-error approach, which is implemented as a straightforward recursive algorithm, to find all solutions. It consists of a game board and a list of pieces. Each piece has a list of all the positions where it can be placed on the board, and a pointer to its current position in that list. A game board requires just one 8-byte unsigned long integer, and individual bits are set to mark basic squares as occupied. The `go()` function sets a piece on the board and eventually removes it again. It is called 1.23 million times while the program finds all solutions, which may explain why it can be hard to find a solution manually. If you think that's a big number though, read on.
 
 ```c
 /********************************************************/
@@ -113,7 +113,7 @@ struct pnode *find_pos(struct tnode *piece)
 
 - The positions of the first piece, the cross, are limited to positions in the upper left quadrant of the 10x6 game board to eliminate mirrored and rotated solutions.
 - The list of pieces is sorted by the number of positions a piece can be placed on the board. The idea is to use the hardest to place pieces first. If I leave the cross in the first position and invert the positions of all other pieces (```pentomino -p7 -q -n pentomino.ini```), then it takes just under 20 seconds to find all solutions, compared to less than 0.3 seconds if the positions are sorted (same command, without the ```-n``` option).
-- A plausibility check to determine if a game board still makes sense after adding a piece; it simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares. This one is _the_ game changer: without this optimization, the program takes 12min 50s to find all solutions and the go() function is called a mind-boggling 11.2 _billion_ times. With this plausibility check, it takes less than 0.3 seconds, i.e., is 3,000 times faster, and go() is called "only" 1.23 million times. Instead, the recursive fill function used for the check (see below) is then called 183 million times and accounts for 56% of the total time spent (gprof) and 73% of all instructions executed (cachegrind).
+- A plausibility check to determine if a game board still makes sense after adding a piece; it simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares. This one is _the_ game changer: without this optimization, the program takes 12min 50s to find all solutions and the `go()` function is called a mind-boggling 11.2 _billion_ times. With this plausibility check, it takes less than 0.3 seconds, i.e., is 3,000 times faster, and `go()` is called "only" 1.23 million times. Instead, the recursive function `f_fill()`, used for the check (see below), is then called 183 million times, and accounts for 56% of the total time spent (gprof) and 73% of all instructions executed (cachegrind).
 - Lastly, the program can split the workload and start multiple processes that work in parallel. It does that by distributing the positions of the first piece to different processes. As the cross has only seven positions in the upper left quadrant of the game board, the number of worker processes is limited to a maximum of seven - not enough to make use of all cores and CPUs of modern computers. A single process requires just over 1 second to find all solutions, with seven worker processes, it takes less than 0.3 seconds.
 
 ```c
