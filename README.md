@@ -111,10 +111,10 @@ struct pnode *find_pos(struct tnode *piece)
 
 ## Optimizations
 
-- The positions of the first piece, the cross, are limited to positions in the upper left quadrant of the 10x6 game board to eliminate mirrored and rotated solutions.
+- The positions of the first piece, the cross, are limited to positions in the upper left quadrant of the 10x6 game board to eliminate mirrored and rotated solutions. Each solution can be mirrored or rotated to create another three, thus this optimization makes the program in the order of 4 times faster.
 - The list of pieces is sorted by the number of positions a piece can be placed on the board. The idea is to use the hardest to place pieces first. If I leave the cross in the first position and invert the positions of all other pieces (```pentomino -p7 -q -n pentomino.ini```), then it takes about 20 seconds to find all solutions. So with this optimization, the program is up to 80 times faster.
 - A plausibility check to determine if a game board still makes sense after adding a piece; it simply checks if the size of every not yet occupied contiguous region on the game board is a multiple of five basic squares. This one is _the_ game changer: without this optimization, the program takes almost 13 minutes to find all solutions and the `go()` function is called a mind-boggling 11.2 _billion_ times (11.2 x 10<sup>9</sup>). With this plausibility check, it is 3,000 times faster, and `go()` is called "only" 1.23 million times. Instead, the recursive fill function used for the check (see below) is then called 183 million times and accounts for 56% of the total time spent (gprof) and 73% of all instructions executed (cachegrind).
-- Lastly, the program can split the workload and start multiple processes that work in parallel. It does that by distributing the positions of the first piece to different processes. As the cross has only seven positions in the upper left quadrant of the game board, the number of worker processes is limited to a maximum of seven - not enough to make use of all cores and CPUs of modern computers. A single process requires just over 1 second to find all solutions, with seven worker processes in parallel, it is only 4 times faster.
+- Lastly, the program can split the workload and start multiple processes that work in parallel. It does this by distributing the positions of the first piece to different processes. As the cross has only seven positions in the upper left quadrant of the game board, the number of worker processes is limited to a maximum of seven - not enough to make use of all cores and CPUs of modern computers. A single process requires just over 1 second to find all solutions, with seven worker processes in parallel, it is only 4 times faster.
 
 ```c
 /****************************************************************/
@@ -153,7 +153,7 @@ int f_fill(struct fieldT *field, int x, int y)
 
 ## Limitations
 
-The pentomino program only works for the standard 10x6 board size. Support for different game board sizes, even holes in the board and different board shapes could be added relatively easily. Support for pieces of different sizes exists but has never really been tested.
+The pentomino program only works for the standard 10x6 board size. Support for different game board sizes, even holes in the board and different board shapes could be added relatively easily. Several things break when the cross is not the first piece in the list. Support for pieces of different sizes exists but has never really been tested.
 
 ## License
 
